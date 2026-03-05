@@ -1,7 +1,7 @@
 # Layman Notes — Insurance ML Project
 
-A simple plain-English explanation of every concept used in this project.
-No jargon, no maths — just what each thing _actually means_.
+These are my personal notes written while working through this project.
+I wrote them in plain English so I (and anyone else reading this) can come back later and actually understand what was done and why.
 
 ---
 
@@ -50,7 +50,7 @@ df = pd.read_csv('insurance.csv')
 
 EDA = "Let me look at this data before doing anything with it."
 
-Before building any model, a good data scientist always visualises the data first to understand its shape and spot anything unusual.
+> Before touching the data, I always plotted it first to see what I was working with — are the values spread out, are there weird outliers, does anything look off?
 
 ### Distribution Plot (Histogram + KDE)
 
@@ -221,4 +221,4 @@ age | is_female | bmi | children | is_smoker | region_southeast | bmi_category_o
 
 ---
 
-_These notes are a companion to `insurance_ml_project.py`. Written for beginners — no prior statistics or ML background assumed._
+_These are my notes from my first ML project. Kept simple on purpose — no prior stats or ML knowledge needed to read them._

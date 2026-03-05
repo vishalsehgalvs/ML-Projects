@@ -1,6 +1,6 @@
 # Insurance ML Project
 
-A beginner-friendly machine learning project for insurance data analysis and feature selection. This project demonstrates data cleaning, preprocessing, visualization, and statistical analysis using Python.
+This is my first ML project. I picked up a Kaggle insurance dataset and worked through the full process — loading the data, cleaning it, exploring it with charts, and figuring out which columns actually matter for predicting insurance charges.
 
 ## Folder Structure
 
@@ -13,26 +13,24 @@ A beginner-friendly machine learning project for insurance data analysis and fea
   - `children boxplot.png`, `children count plot.png`, `children plot distribution.png`
   - `data heatmap.png`, `gender plot.png`, `smoker plot.png`
 
-## Workflow Overview
+## What I Did (Step by Step)
 
-1. **Data Loading**
-   - Loads `insurance.csv` using pandas.
-   - Displays basic info, summary statistics, and checks for missing values.
+1. **Loaded the data**
+   - Read `insurance.csv` into pandas and checked what it looks like — column types, basic stats, any missing values.
 
-2. **Exploratory Data Analysis (EDA)**
-   - Visualizes distributions and relationships for numeric features (age, bmi, children, charges).
-   - Generates boxplots, histograms, count plots, and heatmaps (see images).
+2. **Explored the data visually (EDA)**
+   - Plotted distributions, boxplots, count plots, and a heatmap to understand the data before touching it.
 
-3. **Data Cleaning & Preprocessing**
-   - Removes duplicates.
-   - Encodes categorical variables (`sex`, `smoker`, `region`) to numeric.
-   - Creates new features (e.g., BMI categories).
-   - Scales numeric features using `StandardScaler`.
+3. **Cleaned and prepared the data**
+   - Dropped duplicate rows.
+   - Converted text columns (`sex`, `smoker`, `region`) into numbers so the model can read them.
+   - Created a new BMI category column (underweight / normal / overweight / obese).
+   - Scaled numeric columns so they're all on the same scale.
 
-4. **Feature Selection & Statistical Analysis**
-   - Calculates Pearson correlation for selected features vs. charges.
-   - Performs Chi-square tests for categorical features.
-   - Selects final features based on statistical significance.
+4. **Picked the most important features**
+   - Used Pearson Correlation to see which columns are linked to charges.
+   - Used Chi-Square tests to check if categorical columns are statistically relevant.
+   - Dropped the ones that didn't matter.
 
 ## Visualizations
 
@@ -83,11 +81,11 @@ A beginner-friendly machine learning project for insurance data analysis and fea
 | 18  | male   | 33.77 | 1        | no     | southeast | 1725.5523 |
 | ... | ...    | ...   | ...      | ...    | ...       | ...       |
 
-## How to Use
+## How to Run
 
-1. Run `insurance_ml_project.py` to execute the analysis.
-2. Review generated plots in the folder for insights.
-3. Use the code as a reference for basic ML workflow and feature engineering.
+1. Run `insurance_ml_project.py` — it will print results at each step.
+2. To see the plots, uncomment the plot lines in the EDA section.
+3. Feel free to use this as a reference — that's what it's here for.
 
 ## Key Findings
 
@@ -133,4 +131,4 @@ age | is_female | bmi | children | is_smoker | region_southeast | bmi_category_o
 
 ---
 
-_This project is for learning and reference purposes. Dataset source: Kaggle._
+_My first ML project. Dataset from Kaggle. Still learning — model training comes next._
