@@ -5,10 +5,11 @@ Each folder is a self-contained project with its own code, data, notes, and visu
 
 ## Projects
 
-| Folder                   | Description                                                                                 | Status      |
-| ------------------------ | ------------------------------------------------------------------------------------------- | ----------- |
-| [insurance](./insurance) | EDA, data cleaning, feature engineering and feature selection on a Kaggle insurance dataset | ✅ Complete |
-| [Heart](./Heart)         | EDA, data cleaning, encoding and scaling on a Kaggle heart disease dataset                  | ✅ Complete |
+| Folder                       | Description                                                                                 | Status      |
+| ---------------------------- | ------------------------------------------------------------------------------------------- | ----------- |
+| [insurance](./insurance)     | EDA, data cleaning, feature engineering and feature selection on a Kaggle insurance dataset | ✅ Complete |
+| [Heart](./Heart)             | EDA, data cleaning, encoding and scaling on a Kaggle heart disease dataset                  | ✅ Complete |
+| [AI_ML_Notes](./AI_ML_Notes) | Personal notes on AI vs ML vs DL, supervised vs unsupervised learning, and key ML concepts  | ✅ Complete |
 
 ---
 
