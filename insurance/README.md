@@ -32,6 +32,12 @@ This is my first ML project. I picked up a Kaggle insurance dataset and worked t
    - Used Chi-Square tests to check if categorical columns are statistically relevant.
    - Dropped the ones that didn't matter.
 
+5. **Split the data and trained a model**
+   - Kept 80% of the rows to train the model on and held back 20% to test it at the end.
+   - The 20% test rows are something the model has never seen — so the score on them is honest.
+   - Trained a Linear Regression model on the training rows.
+   - Checked the score on the test rows to see how well it did.
+
 ## Visualizations
 
 ### Age Analysis
@@ -118,17 +124,52 @@ After both Pearson correlation and Chi-square analysis, the following 8 features
 age | is_female | bmi | children | is_smoker | region_southeast | bmi_category_obese | charges
 ```
 
+## Model Training and Results
+
+Went with Linear Regression first since it's the simplest starting point. You give it the input columns and the charges column, it figures out a formula that connects them, and then uses that formula to guess charges for rows it hasn't seen.
+
+**Train / Test split**
+
+Split the data 80/20. 80% went into training, 20% got set aside and weren't touched until the very end. The reason you do this — if you test on the same data you trained on, the model has already seen those rows and knows the answers. That's not a real test. The 20% it's never seen is the honest check.
+
+**Results**
+
+| Metric      | Score  |
+| ----------- | ------ |
+| R²          | 0.8041 |
+| Adjusted R² | 0.7988 |
+
+R² of 0.80 means the model explained about 80% of why some people pay more than others. For a first attempt with the most basic model, that's decent.
+
+Adjusted R² being almost the same (0.7988 vs 0.8041) means the 8 columns we kept are actually doing useful work. If some columns were just dead weight, adjusted R² would've dropped noticeably below plain R².
+
+**Overfitting and Underfitting**
+
+Overfitting — model scores great on training rows but badly on test rows. It basically crammed the training data instead of learning the actual pattern. Like a student who memorised only last year's JEE paper and blanks on anything worded slightly differently in the real exam.
+
+Underfitting — bad on both. Model just didn't learn anything useful.
+
+Scored around 80% on both here so neither was an issue.
+
+**What to try next**
+
+Ridge and Lasso — same as Linear Regression but with a small penalty that stops the model from leaning too hard on just one or two columns. Worth trying to see if the score improves.
+
+Cross validation — do the 80/20 split 5 times with different rows each time and average the scores. Less dependent on luck about which rows ended up in the test set.
+
 ## What I Learned
 
-- How to load and perform EDA on a real-world dataset
-- Handling duplicate rows and verifying data quality
-- Label encoding and one-hot encoding for categorical variables
-- Creating new features from existing ones (BMI categories)
-- Feature scaling with `StandardScaler`
-- Using **Pearson Correlation** to measure linear relationships with the target
-- Using **Chi-Square Tests** to assess independence of categorical features
-- How to select a final, clean feature set ready for model training
+- Always check the data first before touching anything — head, info, describe, nulls
+- Duplicate rows exist in real datasets and need to be dropped
+- Text columns have to become numbers before a model can use them
+- Sometimes you create a new column from an existing one (did this with bmi → bmi category)
+- Scaling matters — without it big numbers like mileage or charges dominate just because of their size
+- Pearson Correlation is how you check which number columns are linked to what you want to predict
+- Chi-Square is the same idea but for yes/no and category columns
+- Never test on the same rows you trained on — that's not a real test
+- R² tells you how much of the answer the model got right, Adjusted R² tells you if the columns you used are actually earning their place
+- 80% on a simple first model is a good starting point
 
 ---
 
-_My first ML project. Dataset from Kaggle. Still learning — model training comes next._
+_My first ML project. Dataset from Kaggle._

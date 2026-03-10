@@ -51,6 +51,7 @@ Before doing anything I plotted the data to see what it looks like. The plot cod
 The model only works with numbers so text columns had to be converted.
 
 **For yes/no or male/female columns** — just mapped directly:
+
 - male → 0, female → 1
 - yes → 1, no → 0
 - Renamed `sex` to `is_female` and `smoker` to `is_smoker` so 0/1 makes sense
@@ -65,6 +66,7 @@ Instead creates a separate column for each region with 0 or 1.
 ## Feature Engineering (creating a new column)
 
 Added a `bmi_category` column by grouping BMI values:
+
 - Under 18.5 → underweight
 - 18.5–24.9 → normal
 - 25–29.9 → overweight
@@ -127,4 +129,37 @@ region_northwest   p ≈ 0.769  → drop
 age, is_female, bmi, children, is_smoker, region_southeast, bmi_category_obese, charges
 ```
 
-This is the final cleaned dataset. Next step will be to train a model on this.
+---
+
+## Model Training
+
+Trained a Linear Regression model on the 8 columns above.
+
+Linear Regression just tries to find the best formula connecting the input columns to the charges. Like if you were trying to guess someone's age from their photo — you'd look at wrinkles, hair colour, posture and come up with a rough rule in your head. The model does the same but with numbers and it adjusts the rule until it's as accurate as possible.
+
+**Train / Test split**
+
+Did an 80/20 split. 80% of rows go into training, 20% are kept completely separate and only used at the very end to check the score. `random_state=42` keeps the split the same every time you run it — without this you'd get different rows in each run and couldn't compare results properly.
+
+**Results**
+
+- R² = 0.8041 — model got about 80% right
+- Adjusted R² = 0.7988 — almost the same as R², which means the columns we used are actually contributing and not just inflating the score
+
+Adjusted R² is important because plain R² never goes down when you add more columns, even if those columns are completely useless. Adjusted R² does go down if you're adding junk columns. Both being close here is a good sign.
+
+**Overfitting vs Underfitting**
+
+Overfitting — scored well on training but badly on test. Means the model memorised the training rows instead of learning the actual pattern. Like a student who only reads the solved examples but can't do unseen questions.
+
+Underfitting — scored badly on both. Model didn't learn anything.
+
+We scored around 80% on both so neither is happening here, which is what you want.
+
+**What to try next**
+
+Ridge regression — same as Linear Regression but adds a penalty that stops any one column from getting too much weight. Useful if the model starts overfitting later as more features get added.
+
+Lasso regression — similar to Ridge but it can also reduce some column weights all the way to zero, effectively removing them. Useful for automatic feature selection.
+
+Cross validation — instead of one 80/20 split, do it 5 times with different rows each time and average the scores. Less likely to get a lucky or unlucky split.
