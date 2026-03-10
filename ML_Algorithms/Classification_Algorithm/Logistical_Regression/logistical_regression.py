@@ -1,6 +1,6 @@
-#  inbuild titanic data set is used from seaborn library
+# titanic passenger data — predicting who survived and who didn't
+# dataset is built into seaborn, no separate CSV needed
 
-# importing basic libraries
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -10,7 +10,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 
-# ==============model evaluation libraries===========
+# to measure how well the model did after training
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
 warnings.filterwarnings('ignore')
@@ -79,7 +79,12 @@ df = sns.load_dataset('titanic')
 # alone            0
 # dtype: int64
 
-# deck has lot of nul values no sense in using mean to fill the value sas it will result in bad model
+# dropping 6 columns before doing anything:
+# deck       — 688 out of 891 blank, filling with mean would just be making numbers up
+# alive      — this is just the survived column written as yes/no, keeping it would be cheating
+# class      — same thing as pclass, duplicate
+# embark_town — same thing as embarked, duplicate
+# who, adult_male — already captured by sex and age, nothing new here
 
 df.drop(['class', 'who', 'adult_male', 'deck', 'embark_town', 'alive'], axis=1, inplace=True)
 
@@ -99,7 +104,7 @@ df.drop(['class', 'who', 'adult_male', 'deck', 'embark_town', 'alive'], axis=1, 
 #  8   alone     891 non-null    bool
 # dtypes: bool(1), float64(2), int64(4), object(2)
 
-df['age'].fillna(df['age'].mean(), inplace=True)  # filling na values with mean of age
+df['age'].fillna(df['age'].mean(), inplace=True)  # 177 ages missing — filled with mean (~29.7)
 # print(df['age'])
 # 0      22.000000
 # 1      38.000000
@@ -114,10 +119,10 @@ df['age'].fillna(df['age'].mean(), inplace=True)  # filling na values with mean 
 # 890    32.000000
 # Name: age, Length: 891, dtype: float64
 
-# for 2 missing values in embark we can either fill them with mean value of column or drop entire missing entries
-# so now total entries will come down to 889
+# embarked only has 2 missing rows — just dropping them
+# losing 2 rows out of 891 is nothing, 891 → 889
 
-df.dropna(subset=['embarked'], inplace=True)  # axis not selected so by default axis will be 0
+df.dropna(subset=['embarked'], inplace=True)  # no axis means rows get dropped by default
 
 # print(df.info())
 # Index: 889 entries, 0 to 890
@@ -135,7 +140,8 @@ df.dropna(subset=['embarked'], inplace=True)  # axis not selected so by default 
 #  8   alone     889 non-null    bool
 # dtypes: bool(1), float64(2), int64(4), object(2)
 
-# now we need to perform label encoding of non-numeric data ->from sklearn.preprocessing import LabelEncoder
+# sex and embarked are still words — model can't use words, turning them into numbers
+# female=0, male=1  |  Cherbourg=0, Queenstown=1, Southampton=2
 le = LabelEncoder()
 df['sex'] = le.fit_transform(df['sex'])
 df['embarked'] = le.fit_transform(df['embarked'])
@@ -146,7 +152,7 @@ df['embarked'] = le.fit_transform(df['embarked'])
 # 3         1       1    0  35.0      1      0  53.1000         2  False
 # 4         0       3    1  35.0      0      0   8.0500         2   True
 
-# as you see the values are in true/false so we need to convert them to int using astype()
+# alone column is still True/False — converting everything to int to keep it uniform
 
 df = df.astype(int)
 # print(df.head())
@@ -157,15 +163,16 @@ df = df.astype(int)
 # 3         1       1    0   35      1      0    53         2      0
 # 4         0       3    1   35      0      0     8         2      1
 
-# split the data into x and y columns now to train and predict
+# X = all input columns, y = survived (the thing we're trying to guess)
 
 X = df.drop('survived', axis=True)
 y = df['survived']
 
+# 80% rows go into training, 20% held back for the final test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
 
 model = LogisticRegression()
-model.fit(X_train, y_train)  # logistic regression model is ready
+model.fit(X_train, y_train)  # feeds the training rows in, model figures out the pattern
 
 y_predict = model.predict(X_test)
 # print(y_predict)
@@ -189,17 +196,20 @@ y_predict = model.predict(X_test)
 # 10     1
 # Name: survived, Length: 178, dtype: int64
 
-#  in linear regression we used to create r2 and adjusted_r2 to evaluate our
-#   model but here we will create confusion matrix as its a classification problem
+# linear regression used R² to measure accuracy — that only works when predicting a number
+# here the answer is 0 or 1, so we check how many we got right vs wrong
+# the tool for that is a confusion matrix
 
-# confusion matrix gives us true positive , false positive, false negative and false positive quadrants
-# from confusion matrix we calculate
-# 1.Accuracy
-# 2.Precision
-# 3.Recall
-# 4.F1 score
+# confusion matrix breaks it into 4 buckets:
+# said 0, was 0 → correct  (True Negative)
+# said 1, was 1 → correct  (True Positive)
+# said 1, was 0 → wrong    (False Positive — false alarm)
+# said 0, was 1 → wrong    (False Negative — missed a survivor)
+# from those 4 numbers we get: Accuracy, Precision, Recall, F1
 
-# =========Model evaluation===========
+# =============================================
+# model evaluation
+# =============================================
 
 accuracy_score = accuracy_score(y_test, y_predict)
 # print(accuracy_score)
