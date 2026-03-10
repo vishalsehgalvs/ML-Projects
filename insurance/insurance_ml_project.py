@@ -9,11 +9,15 @@
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import sklearn.linear_model
 from matplotlib import pyplot as plt
 import warnings
 from sklearn.preprocessing import StandardScaler
 from scipy.stats import pearsonr
 from scipy.stats import chi2_contingency
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
 
 warnings.filterwarnings('ignore')
 
@@ -92,7 +96,7 @@ print(df_cleaned.head())
 # ── Remove duplicate rows ──────────────────────────────────────────────────────
 print("before dropping duplicates", df_cleaned.shape)  # (1338, 7)
 df_cleaned.drop_duplicates(inplace=True)
-print("After dropping duplicates", df_cleaned.shape)   # (1337, 7)
+print("After dropping duplicates", df_cleaned.shape)  # (1337, 7)
 
 # ── Confirm no null/missing values remain ─────────────────────────────────────
 print(df_cleaned.isnull().sum())
@@ -196,7 +200,6 @@ scaler = StandardScaler()
 df_cleaned[cols] = scaler.fit_transform(df_cleaned[cols])
 print(df_cleaned)
 
-
 # =============================================================================
 # STEP 6: Feature Selection — Pearson Correlation (Numeric Features)
 # Pearson correlation measures linear relationship between each feature and
@@ -281,5 +284,68 @@ print(chi2_df)
 # =============================================================================
 
 final_df = df_cleaned[['age', 'is_female', 'bmi', 'children', 'is_smoker',
-                        'charges', 'region_southeast', 'bmi_category_obese']]
+                       'charges', 'region_southeast', 'bmi_category_obese']]
 print(final_df)
+
+# =============================================================================
+# STEP 9: Split into training and testing
+# cant test on the same data you trained on — thats just asking it the same
+# questions it already saw the answers to. so we split first.
+# 80% to learn from, 20% set aside and only look at it at the very end.
+# =============================================================================
+
+# X = all the input columns, y = the charges column we want to predict
+X = final_df.drop('charges', axis=True)
+y = final_df['charges']
+
+# random_state=42 keeps the split the same every time — without it youd get
+# different rows each run which makes it hard to compare results
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
+
+# =============================================================================
+# STEP 10: Build the model
+# starting with Linear Regression — simplest thing that could work here.
+# basically draws a best fit line through the data to predict charges.
+# =============================================================================
+
+model = LinearRegression()
+model.fit(X_train, y_train)  # feeds the training rows in, model figures out the line
+
+# =============================================================================
+# STEP 11: Check the score
+# R² is the main number — how much of the answer did we get right.
+# 1.0 would mean perfect, 0 means we might as well have just guessed every time.
+# Adjusted R² is the same thing but goes down if you added useless columns,
+# so its a bit more honest about whether the columns are actually helping.
+# =============================================================================
+
+y_predict = model.predict(X_test)  # run it on the 20% test rows we held back
+# print(y_predict)  # uncomment to see what it actually predicted
+
+r2 = r2_score(y_test, y_predict)
+print("Model accuracy:", r2)
+
+# need row count and column count to calculate adjusted R²
+n = X_test.shape[0]   # number of rows in test set
+p = X_test.shape[1]   # number of columns used
+
+adjusted_r2 = 1 - ((1 - r2) * (n - 1) / (n - p - 1))
+print("Adjusted r2:", adjusted_r2)
+
+# both scores around 80% and almost the same number — good sign
+# if adjusted R² had been much lower it would mean some columns were just
+# sitting there doing nothing and inflating the score
+# Model accuracy:  0.8040712413347119
+# Adjusted R²:     0.7987962362937233
+
+# overfitting = scored well on training but bad on test
+#               like practising only last year's JEE paper and blanking
+#               on a question that was worded slightly differently
+# underfitting = bad on both, model just didnt pick up the pattern at all
+# we're at 80% on both so neither is a problem right now
+
+# things to try next:
+# Ridge / Lasso — same as linear regression but with something that stops the
+# model from putting too much weight on one or two columns
+# Cross validation — instead of one 80/20 split, do it 5 times and average
+ 
