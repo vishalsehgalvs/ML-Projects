@@ -4,13 +4,13 @@ This folder covers classification — problems where the answer is a category, n
 
 ## Algorithms
 
-| Folder                                           | Algorithm              | Dataset           | Status      |
-| ------------------------------------------------ | ---------------------- | ----------------- | ----------- |
-| [Logistical_Regression](./Logistical_Regression) | Logistic Regression    | Titanic (seaborn) | ✅ Complete |
-| KNN                                              | K-Nearest Neighbours   | —                 | 🔜 Coming   |
-| Decision_Tree                                    | Decision Tree          | —                 | 🔜 Coming   |
-| Random_Forest                                    | Random Forest          | —                 | 🔜 Coming   |
-| SVM                                              | Support Vector Machine | —                 | 🔜 Coming   |
+| Folder                                           | Algorithm              | Dataset           | Status         |
+| ------------------------------------------------ | ---------------------- | ----------------- | -------------- |
+| [Logistical_Regression](./Logistical_Regression) | Logistic Regression    | Titanic (seaborn) | ✅ Complete    |
+| [KNN_Algorithm](./KNN_Algorithm)                 | K-Nearest Neighbours   | —                 | 🔄 In Progress |
+| Decision_Tree                                    | Decision Tree          | —                 | 🔜 Coming      |
+| Random_Forest                                    | Random Forest          | —                 | 🔜 Coming      |
+| SVM                                              | Support Vector Machine | —                 | 🔜 Coming      |
 
 ---
 
