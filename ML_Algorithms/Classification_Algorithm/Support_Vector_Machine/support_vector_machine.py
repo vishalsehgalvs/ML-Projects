@@ -1,5 +1,5 @@
 # =============================================================================
-# Titanic Survival Prediction — Naive Bayes
+# Titanic Survival Prediction — Support Vector Machine (SVM)
 # =============================================================================
 # Goal   : Predict whether a passenger survived (1) or died (0)
 # Dataset: Built into seaborn — no CSV needed
@@ -14,20 +14,13 @@ from matplotlib import pyplot as plt
 import warnings
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
-# Naive Bayes — GaussianNB is used when features are continuous numbers
-# (age, fare, pclass all qualify)
-from sklearn.naive_bayes import GaussianNB
-
+# importing state vector machine model libraries
+from sklearn.svm import SVC
 # Evaluation tools — same as Logistic Regression and KNN
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
-# StandardScaler is imported but intentionally not used —
-# Naive Bayes works on probabilities, not distances, so scaling isn't required
-from sklearn.preprocessing import StandardScaler
-
-# KNeighborsClassifier imported — kept for reference/comparison
-from sklearn.neighbors import KNeighborsClassifier
 
 warnings.filterwarnings('ignore')
 
@@ -198,82 +191,46 @@ y = df['survived']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=42)
 
 # -----------------------------------------------------------------------------
-# StandardScaler — intentionally not applied here
+# StandardScaler — required for SVM
 # -----------------------------------------------------------------------------
-# KNN needed scaling because it measures distance — big numbers dominate small ones.
-# Naive Bayes calculates probabilities, not distances. Each feature gets its own
-# distribution (mean + variance), so the scale of numbers doesn't affect the result.
-# Scaling is optional here and skipped deliberately.
+# SVM finds the maximum-margin boundary by measuring distances between points.
+# If fare ranges up to 500 and pclass only goes 1–3, fare would dominate the
+# distance calculation and skew the boundary. Scaling brings all features to
+# the same range so each one contributes equally.
 # -----------------------------------------------------------------------------
 scaler = StandardScaler()
-# X_trained_scaled = scaler.fit_transform(X_train)  # skipped — not needed for Naive Bayes
+X_trained_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.fit_transform(X_test)
+model = SVC(kernel="rbf")  # model created
+# SVM model also requires feature scale
+model.fit(X_trained_scaled,y_train)
+y_prediction = model.predict(X_test_scaled)
+# print(y_prediction)
+# [0 1 1 0 1 0 0 0 1 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 1 0 0 0 0 1
+#  1 0 0 0 0 0 0 0 0 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 0 1 0 1 0 0 0 1 1 0 1 1 0
+#  0 1 0 0 1 0 1 1 1 1 0 0 0 0 0 0 0 1 0 0 0 1 0 0 1 0 0 1 0 0 0 0 1 1 0 0 0
+#  0 0 1 0 0 0 0 1 0 1 1 0 0 1 1 0 1 1 0 1 0 0 0 1 1 0 1 0 1 1 0 1 0 1 0 0 1
+#  0 1 0 1 0 1 0 0 0 0 0 1 0 1 0 0 0 0 1 0 0 1 1 1 1 0 1 0 0 1]
 
-# print(X_train)
-#      pclass  sex  age  sibsp  parch  fare  embarked  alone
-# 708       1    0   22      0      0   151         2      1
-# 240       3    0   29      1      0    14         0      0
-# 382       3    1   32      0      0     7         2      1
-# 792       3    0   29      8      2    69         2      0
-# 683       3    1   14      5      2    46         2      0
-# ..      ...  ...  ...    ...    ...   ...       ...    ...
-# 107       3    1   29      0      0     7         2      1
-# 271       3    1   25      0      0     0         2      1
-# 862       1    0   48      0      0    25         2      1
-# 436       3    0   21      2      2    34         2      0
-# 103       3    1   33      0      0     8         2      1
-#
-# [711 rows x 8 columns]
-# X_train data is without standard scaling
-
-# -----------------------------------------------------------------------------
-# Train the Naive Bayes model
-# -----------------------------------------------------------------------------
-# GaussianNB training = computing the mean and variance of each feature
-# for each class (survived vs died). That's literally all it stores.
-# Prediction = calculate probability for each class, return the higher one.
-# -----------------------------------------------------------------------------
-model_naive_bayes = GaussianNB()
-model_naive_bayes.fit(X_train, y_train)  # model trained — just mean/variance per feature per class
-y_predictions_naive_bayes = model_naive_bayes.predict(X_test)
-# print(y_predictions_naive_bayes)
-# [0 1 1 0 1 0 0 0 1 1 0 1 0 0 0 0 1 0 1 0 0 1 0 1 0 1 0 1 0 0 0 1 0 1 0 0 1
-#  1 0 0 0 1 0 0 0 1 1 0 0 1 1 1 0 0 1 1 1 0 0 0 0 1 1 0 1 0 0 0 1 1 0 1 1 0
-#  1 1 0 0 1 0 1 1 1 1 0 0 0 0 0 0 0 1 0 0 0 1 0 0 0 0 0 1 0 0 0 0 1 1 0 0 0
-#  1 0 1 0 0 0 0 1 0 0 1 0 0 1 1 1 1 1 0 1 0 0 0 1 1 0 1 1 1 1 0 1 0 1 1 0 1
-#  0 1 0 1 0 0 0 1 0 1 0 1 0 1 0 0 1 1 1 0 0 1 1 1 1 0 1 0 0 1]
-
-# -----------------------------------------------------------------------------
-# Model evaluation
-# -----------------------------------------------------------------------------
-# accuracy_score  — what % of predictions were correct overall
-# confusion_matrix — breaks results into 4 buckets:
-#   [TN  FP]   TN = said died, was dead   (correct)
-#   [FN  TP]   TP = said survived, did    (correct)
-#              FP = said survived, died   (false alarm)
-#              FN = said died, survived   (missed a survivor)
-# classification_report — precision, recall, f1 per class
-# -----------------------------------------------------------------------------
-
-accuracy_score_naive_bayes = accuracy_score(y_test, y_predictions_naive_bayes)
-# print(accuracy_score_naive_bayes)
-# 0.7752808988764045  →  77.5% accuracy
-
-confusion_matrix_naive_bayes = confusion_matrix(y_test, y_predictions_naive_bayes)
-# print(confusion_matrix_naive_bayes)
-# [[84  25]    84 correct deaths,  25 false alarms (called survivor, actually died)
-#  [15  54]]   15 missed survivors, 54 correct survivors
-
-classification_report_naive_bayes = classification_report(y_test, y_predictions_naive_bayes)
-# print(classification_report_naive_bayes)
-#
+accuracy_score = accuracy_score(y_test,y_prediction)
+# print(accuracy_score)
+# 0.8258426966292135
+confusion_matrix = confusion_matrix(y_test,y_prediction)
+# print(confusion_matrix)
+# [[96 13]
+#  [18 51]]
+classification_report = classification_report(y_test,y_prediction)
+# print(classification_report)
 #               precision    recall  f1-score   support
 #
-#            0       0.85      0.77      0.81       109
-#            1       0.68      0.78      0.73        69
+#            0       0.84      0.88      0.86       109
+#            1       0.80      0.74      0.77        69
 #
-#     accuracy                           0.78       178
-#    macro avg       0.77      0.78      0.77       178
-# weighted avg       0.78      0.78      0.78       178
-#
-# Notable: Naive Bayes has the highest recall for survivors (0.78) compared to
-# Logistic Regression (0.77) and KNN (0.71) — it catches more actual survivors.
+#     accuracy                           0.83       178
+#    macro avg       0.82      0.81      0.81       178
+# weighted avg       0.82      0.83      0.82       178
+
+
+
+
+
