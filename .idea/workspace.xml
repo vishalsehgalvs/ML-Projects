@@ -1,22 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="0ac9b9c7-84e7-4c30-8bfe-ee3027986073" name="Changes" comment="" />
+    <list default="true" id="0ac9b9c7-84e7-4c30-8bfe-ee3027986073" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI_ML_Notes/ai_vs_ml_vs_dl.md" beforeDir="false" afterPath="$PROJECT_DIR$/Notes/ai_vs_ml_vs_dl.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI_ML_Notes/ml_concepts.md" beforeDir="false" afterPath="$PROJECT_DIR$/Notes/ml_concepts.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AI_ML_Notes/supervised_vs_unsupervised.md" beforeDir="false" afterPath="$PROJECT_DIR$/Notes/supervised_vs_unsupervised.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Decision_Tree_Algorithm/NOTES.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/Decision_Tree/NOTES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Decision_Tree_Algorithm/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/Decision_Tree/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Decision_Tree_Algorithm/decision_tree_algorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/Decision_Tree/decision_tree_algorithm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/KNN_Algorithm/NOTES.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/KNN/NOTES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/KNN_Algorithm/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/KNN/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/KNN_Algorithm/knn_algorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/KNN/knn_algorithm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Logistical_Regression_Algorithm/NOTES.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/Logistic_Regression/NOTES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Logistical_Regression_Algorithm/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/Logistic_Regression/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Logistical_Regression_Algorithm/logistical_regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/Logistic_Regression/logistical_regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Naive_Bayes_Algorithm/NOTES.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/Naive_Bayes/NOTES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Naive_Bayes_Algorithm/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/Naive_Bayes/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Naive_Bayes_Algorithm/naive_bayes_algorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/Naive_Bayes/naive_bayes_algorithm.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Support_Vector_Machine/NOTES.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/SVM/NOTES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Support_Vector_Machine/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/SVM/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Support_Vector_Machine/support_vector_machine.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Classification/SVM/support_vector_machine.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/NOTES.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/NOTES.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/ford.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/ford.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/images/all_columns_correlation.png" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/images/all_columns_correlation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/images/car_model_vs_price_correlation.png" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/images/car_model_vs_price_correlation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/images/engine_size_vs_price_correlation.png" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/images/engine_size_vs_price_correlation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/images/fuel_type_vs_price_correlation.png" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/images/fuel_type_vs_price_correlation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/images/mileage_vs_price_correlation.png" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/images/mileage_vs_price_correlation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/images/price_spread.png" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/images/price_spread.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/images/transmission_vs_price_correlation.png" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/images/transmission_vs_price_correlation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/images/year_vs_price_correlation.png" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/images/year_vs_price_correlation.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ML_Algorithms/Regression_Algorithm/linear_regression_algorithm.py" beforeDir="false" afterPath="$PROJECT_DIR$/Algorithms/Regression/linear_regression_algorithm.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
   <component name="ProjectId" id="3AVgq0EaB0wYVJja6HwUiTWiAdy" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="RunManager" selected="Python.insurance_ml_project (1)">
-    <configuration name="insurance_ml_project (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "last_opened_file_path": "C:/Users/uic18209/Desktop/AI_Projects/ML_Projects/ML_Algorithms/Projects/Frontend_project"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\uic18209\Desktop\AI_Projects\ML_Projects\ML_Algorithms\Projects\Frontend_project" />
+      <recent name="C:\Users\uic18209\Desktop\AI_Projects\ML_Projects\ML_Algorithms\Projects" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\uic18209\Desktop\AI_Projects\ML_Projects\ML_Algorithms\Projects\Frontend_project" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Python.frontend_project_for_heart_attack_prediction">
+    <configuration name="decision_tree_algorithm" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ML_Projects" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -24,11 +83,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/insurance" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Decision_Tree_Algorithm" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/insurance/insurance_ml_project.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Decision_Tree_Algorithm/decision_tree_algorithm.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -37,7 +96,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="insurance_ml_project" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="frontend_project_for_heart_attack_prediction" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="ML_Projects" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -45,11 +104,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/insurance" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ML_Algorithms/Projects/Frontend_project" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="C:\Users\uic18209\Desktop\AI_Projects\ML_Projects\insurance\insurance_ml_project.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ML_Algorithms/Projects/Frontend_project/frontend_project_for_heart_attack_prediction.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -79,10 +138,76 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="ml_project" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ML_Projects" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ML_Algorithms/Projects" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ML_Algorithms/Projects/ml_project.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="naive_bayes_algorithm" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ML_Projects" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Naive_Bayes_Algorithm" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Naive_Bayes_Algorithm/naive_bayes_algorithm.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="support_vector_machine" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="ML_Projects" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Support_Vector_Machine" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/ML_Algorithms/Classification_Algorithm/Support_Vector_Machine/support_vector_machine.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.insurance_ml_project (1)" />
-        <item itemvalue="Python.insurance_ml_project" />
+        <item itemvalue="Python.frontend_project_for_heart_attack_prediction" />
+        <item itemvalue="Python.ml_project" />
+        <item itemvalue="Python.support_vector_machine" />
+        <item itemvalue="Python.decision_tree_algorithm" />
+        <item itemvalue="Python.naive_bayes_algorithm" />
       </list>
     </recent_temporary>
   </component>

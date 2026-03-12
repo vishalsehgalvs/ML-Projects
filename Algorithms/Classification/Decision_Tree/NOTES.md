@@ -126,4 +126,4 @@ The weakness is overfitting. An unconstrained tree memorises the training data. 
 
 ---
 
-_Part of the Classification_Algorithm series._
+_Part of the Algorithms/Classification series._

@@ -234,4 +234,4 @@ KNN is not worse — just a different tool. For visual data, clusters, or patter
 
 ---
 
-_Part of the Classification_Algorithm series._
+_Part of the Algorithms/Classification series._

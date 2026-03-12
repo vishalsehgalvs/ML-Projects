@@ -153,4 +153,4 @@ It's also surprisingly good when you have very little training data — it doesn
 
 ---
 
-_Part of the Classification_Algorithm series._
+_Part of the Algorithms/Classification series._
