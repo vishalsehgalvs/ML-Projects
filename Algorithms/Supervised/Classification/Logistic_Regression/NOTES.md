@@ -167,3 +167,7 @@ Better at non-survivors because the training data had more of them. Model practi
 - Drop `fare`, `sibsp`, `parch` and see if score drops — suspect `sex`, `pclass` and `age` are doing most of the actual work
 - Random Forest — can catch things like "female AND first class survived more" together, which a straight line can't really do
 - `class_weight='balanced'` in LogisticRegression — stops the model quietly favouring non-survivors just because there are more of them in the training data
+
+---
+
+_Part of the Algorithms/Supervised/Classification series._

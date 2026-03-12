@@ -8,13 +8,15 @@ A learning portfolio built while going through machine learning from scratch —
 ML-Projects/
 ├── Notes/          — personal study notes (AI vs ML, supervised vs unsupervised, key concepts)
 ├── Algorithms/     — algorithm exercises using the same Titanic dataset so results are comparable
-│   ├── Regression/         — Linear Regression (Ford used car price prediction)
-│   └── Classification/     — 5 classifiers compared head to head on Titanic survival
-│       ├── Logistic_Regression/
-│       ├── KNN/
-│       ├── Naive_Bayes/
-│       ├── Decision_Tree/
-│       └── SVM/
+│   ├── Supervised/
+│   │   ├── Regression/         — Linear Regression (Ford used car price prediction)
+│   │   └── Classification/     — 5 classifiers compared head to head on Titanic survival
+│   │       ├── Logistic_Regression/
+│   │       ├── KNN/
+│   │       ├── Naive_Bayes/
+│   │       ├── Decision_Tree/
+│   │       └── SVM/
+│   └── Unsupervised/       — Clustering, Dimensionality Reduction (🔜 coming)
 └── Projects/       — real-world applied work on actual datasets
     ├── Insurance_Premium_Prediction/    — EDA + Linear Regression on Kaggle insurance premiums
     ├── Heart_Disease_EDA/               — EDA, cleaning, encoding and scaling on heart disease data
@@ -36,12 +38,12 @@ All five classifiers trained on the same dataset so you can compare fairly:
 
 ## Projects
 
-| Project                                                           | What it does                                                                                   | Status      |
-| ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ----------- |
-| [Insurance_Premium_Prediction](./Projects/Insurance_Premium_Prediction) | EDA, data cleaning, feature selection and Linear Regression on Kaggle insurance premiums | ✅ Complete |
-| [Heart_Disease_EDA](./Projects/Heart_Disease_EDA) | Exploratory data analysis, encoding and scaling on a heart disease dataset | ✅ Complete |
-| [Heart_Disease_Model_Comparison](./Projects/Heart_Disease_Model_Comparison) | Train and compare all 5 classifiers on heart disease data — Logistic Regression wins at 86.96% | ✅ Complete |
-| [Heart_Disease_Prediction_App](./Projects/Heart_Disease_Model_Comparison/Heart_Disease_Prediction_App) | Streamlit web app — fill in health details, get a risk prediction | ✅ Complete |
+| Project                                                                                                | What it does                                                                                   | Status      |
+| ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | ----------- |
+| [Insurance_Premium_Prediction](./Projects/Insurance_Premium_Prediction)                                | EDA, data cleaning, feature selection and Linear Regression on Kaggle insurance premiums       | ✅ Complete |
+| [Heart_Disease_EDA](./Projects/Heart_Disease_EDA)                                                      | Exploratory data analysis, encoding and scaling on a heart disease dataset                     | ✅ Complete |
+| [Heart_Disease_Model_Comparison](./Projects/Heart_Disease_Model_Comparison)                            | Train and compare all 5 classifiers on heart disease data — Logistic Regression wins at 86.96% | ✅ Complete |
+| [Heart_Disease_Prediction_App](./Projects/Heart_Disease_Model_Comparison/Heart_Disease_Prediction_App) | Streamlit web app — fill in health details, get a risk prediction                              | ✅ Complete |
 
 ## Notes
 

@@ -161,4 +161,4 @@ KNN_Algorithm/
 
 ---
 
-_Part of the Algorithms/Classification series._
+_Part of the Algorithms/Supervised/Classification series._

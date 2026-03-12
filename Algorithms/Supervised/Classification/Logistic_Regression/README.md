@@ -141,4 +141,6 @@ Did better on non-survivors than survivors. Test set had 109 non-survivors vs 69
 
 ---
 
+_Part of the Algorithms/Supervised/Classification series._
+
 _First classification model. Titanic from seaborn._

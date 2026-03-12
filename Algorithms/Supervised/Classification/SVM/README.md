@@ -42,3 +42,7 @@ python support_vector_machine.py
 ```
 
 _Requires: pandas, numpy, scikit-learn, seaborn_
+
+---
+
+_Part of the Algorithms/Supervised/Classification series._

@@ -14,4 +14,4 @@ This folder covers classification — problems where the answer is a category, n
 
 ---
 
-_Part of the Algorithms/ series._
+_Part of the Algorithms/Supervised/ series._

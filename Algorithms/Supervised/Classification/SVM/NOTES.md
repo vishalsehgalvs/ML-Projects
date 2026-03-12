@@ -121,4 +121,4 @@ It also doesn't overfit as easily as a Decision Tree, because the margin constra
 
 ---
 
-_Part of the Algorithms/Classification series._
+_Part of the Algorithms/Supervised/Classification series._
