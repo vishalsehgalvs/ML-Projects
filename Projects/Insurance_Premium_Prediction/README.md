@@ -17,6 +17,7 @@ This is my first ML project. I picked up a Kaggle insurance dataset and worked t
 
 1. **Loaded the data**
    - Read `insurance.csv` into pandas and checked what it looks like — column types, basic stats, any missing values.
+   - Set `pd.set_option('display.max_columns', None)` and `pd.set_option('display.width', None)` right after imports — otherwise pandas cuts off columns in the terminal and you see `...` instead of the actual values.
 
 2. **Explored the data visually (EDA)**
    - Plotted distributions, boxplots, count plots, and a heatmap to understand the data before touching it.

@@ -10,6 +10,15 @@ Kaggle dataset, 918 patient records. Target is `HeartDisease` — 1 means they h
 
 Did the usual checks upfront — head, info, describe, isnull, duplicated. No missing values, no duplicate rows. Honestly cleaner than most datasets I've seen.
 
+**One thing to set up before any of that** — when a dataframe has many columns, pandas shrinks the output in the terminal and replaces the middle columns with `...`. You only see the first few and last few, which defeats the point of checking the data. Fix it by adding these two lines right after imports:
+
+```python
+pd.set_option('display.max_columns', None)   # show all columns
+pd.set_option('display.width', None)         # avoid wrapping
+```
+
+After this, `print(df.head())` and `print(df.describe())` print the full table without anything being cut off.
+
 ---
 
 ## Libraries

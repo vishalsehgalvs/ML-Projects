@@ -8,6 +8,9 @@ from sklearn.preprocessing import StandardScaler
 
 warnings.filterwarnings('ignore')  # to ignore warnings due to depricated packages if any
 
+pd.set_option('display.max_columns', None)   # show all columns
+pd.set_option('display.width', None)         # avoid wrapping
+
 df = pd.read_csv('heart.csv')  # reading data
 print(df.head())
 

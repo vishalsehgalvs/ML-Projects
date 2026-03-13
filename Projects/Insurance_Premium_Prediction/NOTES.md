@@ -25,6 +25,15 @@ Read the CSV with `pd.read_csv`. After that I just ran a few things to see what 
 - `df.describe()` — average, min, max etc for number columns
 - `df.isnull().sum()` — check for blank cells (we had none)
 
+**Fixing the truncation problem** — by default pandas cuts off columns in the terminal when there are too many. You'll see `...` in the middle and miss half the table. Add these two lines right after your imports to stop that:
+
+```python
+pd.set_option('display.max_columns', None)   # show all columns
+pd.set_option('display.width', None)         # avoid wrapping
+```
+
+After this, any `print(df)` or `print(df.head())` will show the full table without cutting anything off. Simple fix but easy to forget.
+
 ---
 
 ## EDA (just looking at the data visually)

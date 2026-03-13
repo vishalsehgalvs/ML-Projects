@@ -37,7 +37,7 @@ Kaggle dataset on heart disease. I wanted to work with medical data for a change
 
 ## What I did
 
-Started by just loading the data and running the usual checks — head, info, describe, null counts. This dataset was actually quite clean, no missing values and no duplicate rows, which was a nice surprise.
+Started by just loading the data and running the usual checks — head, info, describe, null counts. This dataset was actually quite clean, no missing values and no duplicate rows, which was a nice surprise. Also set `pd.set_option('display.max_columns', None)` and `pd.set_option('display.width', None)` right at the top — pandas cuts off columns in the terminal by default and shows `...` in the middle, so you end up missing half the table. These two lines stop that.
 
 After that I spent a while just plotting things. Distributions to see the spread of each column, boxplots to check for outliers, countplots for the category columns, a violin plot to compare age across heart disease groups, and a heatmap to see which columns have any relationship with each other. All of that plotting code is commented out in the script — just uncomment whichever chart you want to see.
 
