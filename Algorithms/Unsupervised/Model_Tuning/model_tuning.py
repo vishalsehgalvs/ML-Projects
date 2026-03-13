@@ -1,11 +1,12 @@
 # =============================================================================
-# Titanic Survival Prediction — Decision Tree
+# Titanic Survival Prediction — K-Fold Cross Validation
 # =============================================================================
 # Goal   : Predict whether a passenger survived (1) or died (0)
 # Dataset: Built into seaborn — no CSV needed
-# Note   : Same Titanic dataset and cleaning pipeline as previous algorithms.
-#          Referring same titanic data set for model tuning and demonstrating
-#           K- fold cross validation
+# Note   : Same Titanic dataset and cleaning pipeline as previous projects.
+#          The focus here is not a new algorithm — it's a better way to
+#          evaluate any model: K-Fold Cross Validation instead of one
+#          random 80/20 split.
 # =============================================================================
 
 import numpy as np
@@ -196,9 +197,11 @@ model_svc = SVC()
 model_KNN = KNeighborsClassifier()
 
 # -------------------------------------------------------
-# Default train test split was used 80% and 20% last time
-# now i will use Cross Validation - K fold cross validation
-# from sklearn.model_selection import cross_val_score
+# Previously we used an 80/20 train-test split — one random cut.
+# Problem: that 20% test set might be lucky or unlucky.
+# K-Fold Cross Validation tests the model 5 times on 5 different
+# slices and averages the results — more honest and reliable.
+# cross_val_score (imported above) handles all of this in one call.
 # -------------------------------------------------------
 
 scaler = StandardScaler()
@@ -206,7 +209,7 @@ X_scaled = scaler.fit_transform(X)
 
 # scores = cross_val_score(model_svc, X_scaled, y, cv=5, scoring='accuracy')
 # print(scores)
-# [0.83146067 0.82022472 0.81460674 0.80898876 0.86440678] -> multiple accuracy
+# [0.83146067 0.82022472 0.81460674 0.80898876 0.86440678]  — one accuracy score per fold
 
 # scores = scores.mean()
 # print(scores)
@@ -250,5 +253,7 @@ scores = cross_val_score(model_KNN, X_scaled, y, cv=5, scoring='accuracy')
 # weighted avg       0.77      0.77      0.77       178
 
 # -------------------------------------------------------
-# Default train test split was used 80% ans 20%
+# The confusion matrix and report above came from the old
+# single 80/20 split. Compare those numbers against the
+# K-Fold mean scores above to see why the split matters.
 # -------------------------------------------------------

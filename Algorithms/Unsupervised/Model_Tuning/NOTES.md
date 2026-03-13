@@ -317,6 +317,8 @@ F1 = 2 × (Precision × Recall) / (Precision + Recall)
 
 ### 1. GridSearchCV — find the best hyperparameters
 
+This is now done in `Grid_Search_CV.py` — see the section below.
+
 ```python
 from sklearn.model_selection import GridSearchCV
 
@@ -366,6 +368,295 @@ print(scores.mean())
 | **Precision**               | Of predicted positives, how many were actually positive?           |
 | **Recall**                  | Of actual positives, how many did we catch?                        |
 | **F1 Score**                | Balanced score between precision and recall                        |
+
+---
+
+# Grid Search CV — Notes
+
+> File: `Grid_Search_CV.py` | Dataset: Iris
+
+---
+
+## What are Hyperparameters?
+
+Hyperparameters are settings you choose **before** training starts. The model doesn't learn them from data — you set them manually.
+
+Examples:
+
+- In KNN: how many neighbours to check (`n_neighbors`)
+- In SVM: how strict the penalty for mistakes is (`C`), and the shape of the boundary (`kernel`)
+
+The problem is that different values give different accuracy scores. And there's no formula to tell you the best value upfront — you just have to try.
+
+---
+
+## Why Manual Tuning is a Bad Idea
+
+In `Grid_Search_CV.py`, the first thing done is manually changing values and checking the score:
+
+```python
+model_KNN = KNeighborsClassifier(n_neighbors=5)
+# score = 0.98
+
+model_KNN = KNeighborsClassifier(n_neighbors=13)
+# score = 1.0  ← looks amazing but is suspicious
+```
+
+A score of 1.0 (100%) on a test set is almost always **overfitting** — the model memorised the test examples rather than learning the real pattern. Change the test set and the score drops.
+
+The deeper issue: you're choosing settings by peeking at the test score. That's not honest evaluation — the test set is supposed to be completely untouched until the very end.
+
+**Manual tuning problems:**
+
+- You don't know which combinations to even try
+- There are too many to check by hand
+- You end up unintentionally overfitting to your test set
+
+---
+
+## How GridSearchCV Works
+
+You give it:
+
+1. A model
+2. A dictionary of hyperparameter options to try
+3. How many folds for cross-validation (`cv`)
+
+It tries every combination, runs K-Fold CV on each one, and returns a full results table.
+
+```python
+from sklearn.model_selection import GridSearchCV
+
+classifier = GridSearchCV(model_SVM, param_grid={
+    'C': [1, 10, 20, 30],
+    'kernel': ['rbf', 'linear']
+}, cv=5, return_train_score=False)
+
+classifier.fit(X, y)   # pass the full dataset — GridSearchCV handles the splits
+```
+
+Notice: you pass the full `X` and `y` here, not a train/test split. GridSearchCV does all the splitting internally through cross-validation.
+
+---
+
+## Reading the Results Table
+
+`classifier.cv_results_` returns a messy dictionary. Converting it to a DataFrame makes it readable:
+
+```python
+result_df = pd.DataFrame(classifier.cv_results_)
+pd.set_option('display.max_columns', None)   # show all columns
+pd.set_option('display.width', None)         # avoid wrapping
+print(result_df)
+```
+
+The columns that actually matter:
+
+| Column            | What it tells you                      |
+| ----------------- | -------------------------------------- |
+| `param_C`         | Which value of C was used for this row |
+| `param_kernel`    | Which kernel was used                  |
+| `mean_test_score` | Average accuracy across all 5 folds    |
+| `rank_test_score` | 1 = best combo, higher = worse         |
+
+To get a clean summary:
+
+```python
+clean = result_df[['param_C', 'param_kernel', 'mean_test_score', 'rank_test_score']]
+print(clean.sort_values('rank_test_score'))
+```
+
+---
+
+## SVM Grid Search — What We Found
+
+Searched: `C` in [1, 10, 20, 30] and `kernel` in ['rbf', 'linear'] — 8 combinations total.
+
+```
+C=1,  rbf    → 98.0%   ← rank 1
+C=1,  linear → 98.0%   ← rank 1
+C=10, rbf    → 98.0%   ← rank 1
+C=10, linear → 97.3%
+C=20, rbf    → 96.7%
+C=20, linear → 96.7%
+C=30, rbf    → 96.0%
+C=30, linear → 96.0%
+```
+
+**Why does lower C win?**
+
+`C` controls how much the model punishes itself for misclassifying a training point.
+
+- **High C** = very strict = tries to get every training point right = boundary becomes jagged and specific = overfitting
+- **Low C** = more relaxed = allows a few training mistakes = boundary stays smooth and general = better on unseen data
+
+For the Iris dataset (which is pretty clean and well-separated), `C=1` is relaxed enough to get a smooth boundary that generalises well.
+
+---
+
+## KNN Grid Search — What We Found
+
+Searched 28 combinations (`n_neighbors` × `weights` × `metric`).
+
+Best result:
+
+```
+n_neighbors=11, weights='distance', metric='minkowski'  → 98.67%   rank 1
+n_neighbors=11, weights='distance', metric='euclidean'  → 98.67%   rank 1
+```
+
+**Why `weights='distance'`?**
+
+With `weights='uniform'`, every neighbour gets an equal vote regardless of how close they are. A neighbour 0.01 away counts the same as one 5.0 away.
+
+With `weights='distance'`, closer neighbours count more. A flower that's almost identical to the new one has more say than a flower that's only vaguely similar.
+
+For the Iris dataset, distance weighting helped because the three species form fairly tight clusters — nearby neighbours are very reliable signals.
+
+**Why not n_neighbors=13 which scored 1.0 earlier?**
+
+That 1.0 was tested on a fixed 33% test split without cross-validation — that split happened to be easy. GridSearchCV's 5-fold CV tested on multiple different slices and gave a more honest score of 97.3%. The slightly lower, more honest number is trustworthy. The 1.0 was not.
+
+---
+
+## The Iris Dataset
+
+Iris is a classic benchmark dataset with 150 rows of flower measurements. Unlike Titanic, it needs no cleaning — no missing values, no text columns, no duplicate rows.
+
+```
+   sepal_length  sepal_width  petal_length  petal_width species
+0           5.1          3.5           1.4          0.2  setosa
+1           4.9          3.0           1.4          0.2  setosa
+...
+```
+
+Three classes: `setosa`, `versicolor`, `virginica`. This is a **multi-class** problem (3 categories), unlike Titanic which was binary (survived: yes or no). Both SVM and KNN handle multi-class natively.
+
+---
+
+## Concept Summary
+
+| Concept              | In One Line                                                                  |
+| -------------------- | ---------------------------------------------------------------------------- |
+| **Hyperparameter**   | A model setting you choose before training — not learned from data           |
+| **GridSearchCV**     | Tries every combo of hyperparameters using CV and returns the best one       |
+| **param_grid**       | The dictionary of options you want to test                                   |
+| **cv=5**             | Each combo is tested with 5-fold cross validation                            |
+| **mean_test_score**  | The average accuracy across all 5 folds for that combo                       |
+| **rank_test_score**  | 1 = best; use this to sort and find the winner                               |
+| **C (in SVM)**       | Strictness — lower C = smoother boundary = less overfitting                  |
+| **weights=distance** | Closer neighbours vote more — useful when clusters are tight                 |
+| **Overfitting sign** | Score of 1.0 on a simple test split with n_neighbors=13 — doesn't hold in CV |
+
+---
+
+# Randomized Search CV — Notes
+
+> File: `random_search.py` | Dataset: Iris
+
+---
+
+## The Problem with Grid Search at Scale
+
+Grid Search is great but it always tries every combination. If your param grid has:
+
+- 10 values of C
+- 5 kernels
+- 3 gamma values
+
+That's 10 × 5 × 3 = **150 combinations**, each run 5 times with cross-validation = **750 model fits**.
+
+For small grids, fine. For large grids, it can take a very long time.
+
+Randomized Search solves this with one extra parameter: `n_iter`.
+
+---
+
+## How RandomizedSearchCV Works
+
+```python
+from sklearn.model_selection import RandomizedSearchCV
+
+classifier = RandomizedSearchCV(model_SVM, {
+    'C': [1, 10, 20, 30],
+    'kernel': ['rbf', 'linear']
+}, cv=5, return_train_score=False, n_iter=4)
+
+classifier.fit(X, y)
+```
+
+`n_iter=4` means: instead of testing all 8 combinations, randomly pick 4.
+
+Everything else — splitting, fitting, scoring, results format — is identical to GridSearchCV.
+
+---
+
+## Why Random Sampling Works
+
+You might ask: "what if the randomly chosen combos miss the best one?"
+
+In practice this rarely matters because:
+
+1. The best combo usually isn't dramatically better than the second or third best
+2. With a reasonable `n_iter` (20-50% of total combos), you almost always get close to the top
+3. The time saved by skipping the rest usually outweighs the tiny accuracy difference
+
+In this experiment: Grid Search tried all 8 SVM combos and found 98.0%. Randomized Search tried 4 and also found 98.0%. Same result, half the work.
+
+---
+
+## SVM — What We Found
+
+`n_iter=4` — 4 random combos picked from 8.
+
+```
+C=30, linear  → 96.0%   rank 4
+C=20, linear  → 96.7%   rank 3
+C=20, rbf     → 98.0%   rank 1
+C=1,  linear  → 98.0%   rank 1
+```
+
+Best found: C=20 rbf or C=1 linear at 98.0%. Note: the exact picks change each run because they're random. The winner might be slightly different on your machine.
+
+---
+
+## KNN — What We Found
+
+`n_iter=5` — 5 random combos picked from 28.
+
+```
+n_neighbors=13, distance, minkowski  → 98.0%   rank 2
+n_neighbors=3,  distance, euclidean  → 96.7%   rank 5
+n_neighbors=11, distance, euclidean  → 98.67%  rank 1
+n_neighbors=9,  distance, euclidean  → 97.3%   rank 3
+n_neighbors=13, uniform,  minkowski  → 97.3%   rank 3
+```
+
+Best: `n_neighbors=11, weights=distance, metric=euclidean` at 98.67%. Same as the full Grid Search result.
+
+---
+
+## When to Use Which
+
+| Situation                             | Use                                                         |
+| ------------------------------------- | ----------------------------------------------------------- |
+| Fewer than ~20 combinations           | GridSearchCV                                                |
+| Hundreds of combinations              | RandomizedSearchCV                                          |
+| You want guaranteed exhaustive search | GridSearchCV                                                |
+| Quick exploration of a large space    | RandomizedSearchCV                                          |
+| First pass, then narrow down          | RandomizedSearchCV first, then Grid Search on the shortlist |
+
+---
+
+## Concept Summary
+
+| Concept                | In One Line                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------- |
+| **RandomizedSearchCV** | Same as GridSearchCV but only tests n_iter randomly chosen combos            |
+| **n_iter**             | How many random combinations to try — lower = faster, higher = more thorough |
+| **Trade-off**          | Speed vs exhaustiveness — usually worth it for large grids                   |
+| **Results format**     | Same as GridSearchCV — `cv_results_`, `mean_test_score`, `rank_test_score`   |
+| **Unpredictability**   | Picks are random so results may vary slightly between runs                   |
 
 ---
 

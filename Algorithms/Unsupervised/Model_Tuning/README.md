@@ -255,4 +255,194 @@ The dataset is loaded directly from seaborn — no CSV needed.
 
 ---
 
+# Grid Search CV — Finding the Best Settings Automatically
+
+**File:** `Grid_Search_CV.py`
+**Dataset:** Iris (built into seaborn — no CSV needed)
+**Goal:** Stop guessing hyperparameters by hand. Let the computer try every combination and tell you which one works best.
+
+---
+
+## The Problem — Too Many Knobs to Turn
+
+Every model has settings you can change before training. In SVM, for example:
+
+- `C` — how strict the model is about misclassifications (tried: 1, 10, 20, 30)
+- `kernel` — the shape of the decision boundary (tried: `rbf`, `linear`)
+
+In KNN:
+
+- `n_neighbors` — how many nearby points to vote
+- `weights` — equal vote or closer = more weight
+- `metric` — how distance is measured
+
+Changing these affects the score. The problem is: **there are too many combinations to try by hand**, and you don't know upfront which one is best.
+
+Here's what happens when you pick manually:
+
+```
+KNN with n_neighbors=5  → score = 0.98    ← looks great
+KNN with n_neighbors=13 → score = 1.00    ← suspiciously perfect (overfitting)
+
+SVM with kernel='rbf', C=30 → 0.98
+SVM with kernel='linear', C=10 → 0.98
+
+Which is actually the best? Hard to say without trying all combinations.
+```
+
+---
+
+## The Solution — GridSearchCV
+
+GridSearchCV tries every combination from a list you give it, runs K-Fold cross validation on each one, and tells you which combination scored best.
+
+```
+You give it:
+  C = [1, 10, 20, 30]
+  kernel = ['rbf', 'linear']
+
+It tries:
+  C=1,  kernel=rbf    → CV score: 98.0%
+  C=1,  kernel=linear → CV score: 98.0%
+  C=10, kernel=rbf    → CV score: 98.0%
+  C=10, kernel=linear → CV score: 97.3%
+  C=20, kernel=rbf    → CV score: 96.7%
+  C=20, kernel=linear → CV score: 96.7%
+  C=30, kernel=rbf    → CV score: 96.0%
+  C=30, kernel=linear → CV score: 96.0%
+
+Winner: C=1 with rbf (or linear) — both at 98.0%
+```
+
+Instead of you doing this loop manually, `GridSearchCV` does it for you in one call.
+
+---
+
+## Dataset — Iris
+
+The Iris dataset has 150 rows — one per flower. The goal is to predict which of 3 species it is: `setosa`, `versicolor`, or `virginica`.
+
+| Column         | What it means              |
+| -------------- | -------------------------- |
+| `sepal_length` | Length of the outer petal  |
+| `sepal_width`  | Width of the outer petal   |
+| `petal_length` | Length of the inner petal  |
+| `petal_width`  | Width of the inner petal   |
+| `species`      | The label we're predicting |
+
+This dataset is **already clean** — no missing values, no text to encode. It's a classic starter dataset, often used when you want to focus on the method (like GridSearchCV) rather than data cleaning.
+
+---
+
+## SVM Grid Search Results
+
+| C   | Kernel | Mean CV Score | Rank |
+| --- | ------ | ------------- | ---- |
+| 1   | rbf    | 98.0%         | 1    |
+| 1   | linear | 98.0%         | 1    |
+| 10  | rbf    | 98.0%         | 1    |
+| 10  | linear | 97.3%         | 4    |
+| 20  | rbf    | 96.7%         | 5    |
+| 20  | linear | 96.7%         | 6    |
+| 30  | rbf    | 96.0%         | 7    |
+| 30  | linear | 96.0%         | 7    |
+
+**Finding:** Lower C values worked best. A smaller C means the model allows a few mistakes to keep the boundary simple and general. A larger C forces the model to get every training point right — which leads to overfitting.
+
+---
+
+## KNN Grid Search Results
+
+Best combination found:
+
+| n_neighbors | weights  | metric    | Mean CV Score | Rank |
+| ----------- | -------- | --------- | ------------- | ---- |
+| 11          | distance | minkowski | 98.67%        | 1    |
+| 11          | distance | euclidean | 98.67%        | 1    |
+
+**Finding:** `n_neighbors=11` with `weights='distance'` (closer neighbours count more) was the best setup. Compare this to `n_neighbors=13` with uniform weights which scored 1.0 on the manual test — that was overfitting. GridSearchCV with cross-validation exposes that.
+
+---
+
+## Libraries Used (Grid_Search_CV.py)
+
+| Library                                    | Purpose                                    |
+| ------------------------------------------ | ------------------------------------------ |
+| `pandas`                                   | Converting GridSearchCV results to a table |
+| `seaborn`                                  | Loading the built-in Iris dataset          |
+| `sklearn.model_selection.GridSearchCV`     | Trying all hyperparameter combinations     |
+| `sklearn.model_selection.train_test_split` | Splitting data for manual comparison       |
+| `sklearn.svm.SVC`                          | Support Vector Machine classifier          |
+| `sklearn.neighbors.KNeighborsClassifier`   | K-Nearest Neighbours classifier            |
+
+---
+
+---
+
+# Randomized Search CV — Faster Than Trying Everything
+
+**File:** `random_search.py`
+**Dataset:** Iris (same as Grid_Search_CV.py)
+**The one new idea:** Instead of testing every single combination, randomly pick a few and test those.
+
+---
+
+## Grid Search vs Randomized Search
+
+|                           | Grid Search CV        | Randomized Search CV                |
+| ------------------------- | --------------------- | ----------------------------------- |
+| What it tries             | Every combination     | A random sample of combinations     |
+| Speed                     | Slower                | Faster                              |
+| You control how many?     | No — always tries all | Yes — `n_iter` sets how many to try |
+| Risk of missing the best? | Never                 | Possible, but usually fine          |
+| Best for                  | Small param grids     | Large param grids                   |
+
+**Rule of thumb:** fewer than ~20 combinations, use Grid Search. Hundreds of options, use Randomized Search — it gets you close to the best without testing every single option.
+
+---
+
+## How n_iter Works
+
+Grid Search with 4 values of C and 2 kernels = 8 combinations. It tries all 8.
+
+Randomized Search with the same grid but `n_iter=4` = tries 4 randomly chosen combos out of 8.
+
+```
+Grid Search:        C=1/rbf, C=1/linear, C=10/rbf, C=10/linear, C=20/rbf, C=20/linear, C=30/rbf, C=30/linear
+                    (all 8 tried)
+
+Randomized Search:  C=30/linear, C=20/linear, C=20/rbf, C=1/linear
+(n_iter=4)          (only 4, randomly picked)
+```
+
+---
+
+## SVM Randomized Search Results
+
+`n_iter=4` — tested 4 out of 8 possible combinations:
+
+| C   | Kernel | Mean CV Score | Rank |
+| --- | ------ | ------------- | ---- |
+| 20  | rbf    | 98.0%         | 1    |
+| 1   | linear | 98.0%         | 1    |
+| 20  | linear | 96.7%         | 3    |
+| 30  | linear | 96.0%         | 4    |
+
+Still found a 98% result — same as full Grid Search — despite only trying half the combinations.
+
+---
+
+## KNN Randomized Search Results
+
+`n_iter=5` — tested 5 out of 28 possible combinations:
+
+| n_neighbors | weights  | metric    | Mean CV Score | Rank |
+| ----------- | -------- | --------- | ------------- | ---- |
+| 11          | distance | euclidean | 98.67%        | 1    |
+| 13          | distance | minkowski | 98.0%         | 2    |
+
+Same best result as full Grid Search (`n_neighbors=11, distance weighting`), despite only checking 5 out of 28 options.
+
+---
+
 _Part of the Algorithms/Unsupervised/Model_Tuning series._
