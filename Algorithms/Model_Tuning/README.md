@@ -445,4 +445,104 @@ Same best result as full Grid Search (`n_neighbors=11, distance weighting`), des
 
 ---
 
-_Part of the Algorithms/Unsupervised/Model_Tuning series._
+---
+
+# Ensemble Methods — Asking Many Models Instead of One
+
+**Files:** `ensemble_learning.py` (concepts overview), `ensemble_methods.py` (all techniques with code)
+**Dataset:** Iris (same as Grid Search examples)
+**The idea:** Instead of training one model and trusting it, train several and combine their answers. The group is almost always smarter than the individual.
+
+---
+
+## Why Ensemble?
+
+Any single model has blind spots — certain types of examples it just doesn't handle well. When you combine different models, their weak spots tend to cancel out.
+
+```
+Model A gets examples 3 and 7 wrong.
+Model B gets examples 1 and 3 wrong.
+Model C gets examples 3 and 9 wrong.
+
+Majority vote:  Example 3 → all three wrong → still wrong (you can't fix what everyone gets wrong)
+               Example 7 → only A wrong, B+C correct → majority says correct ✓
+               Example 1 → only B wrong, A+C correct → majority says correct ✓
+```
+
+The ensemble loses where all models agree they're wrong — but gains everywhere the errors don't overlap.
+
+---
+
+## Three Types of Ensemble
+
+### 1. Stacking
+
+Train several different models (base learners) and then train a second model (meta-learner) on top of their predictions.
+
+```
+Decision Tree   → predicts: setosa
+SVM             → predicts: setosa        →  Meta-Learner (Logistic Regression)
+Logistic Reg.   → predicts: versicolor   →  Final prediction: setosa
+```
+
+The meta-learner learns which base models to trust and when. If Decision Tree and SVM usually agree and are usually right, the meta-learner learns to weight them more heavily.
+
+**In code:** `StackingClassifier(estimators=base_learners, final_estimator=meta_learner, cv=5)`
+
+---
+
+### 2. Bagging — Random Forest
+
+Train many of the same model type (decision trees) in parallel, each on a different random slice of the data. Take a majority vote.
+
+```
+Tree 1 (trained on rows 1-400 + 600-800): predicts setosa
+Tree 2 (trained on rows 100-350 + 700-900): predicts setosa
+Tree 3 (trained on rows 50-200 + 500-750): predicts versicolor
+...
+100 trees total → majority vote → setosa
+```
+
+Each tree sees slightly different data, so they make different mistakes. The vote averages them out.
+
+**In code:** `RandomForestClassifier(n_estimators=100)`
+
+---
+
+### 3. Boosting — AdaBoost, Gradient Boosting, XGBoost
+
+Train models in sequence. Each new model looks at what the previous one got wrong and focuses harder on those examples.
+
+```
+Round 1: Model trains normally → gets rows 3, 7, 12 wrong
+Round 2: New model, rows 3, 7, 12 get extra weight → gets rows 7, 15 wrong
+Round 3: New model, rows 7, 15 get extra weight → gets row 15 wrong
+...and so on for 100 rounds
+
+Final prediction = weighted combination of all rounds
+```
+
+| Algorithm          | How it boosts                                            | Result on Iris |
+| ------------------ | -------------------------------------------------------- | -------------- |
+| AdaBoost           | Misclassified rows get higher weight next round          | 93.3%          |
+| Gradient Boosting  | Each tree corrects the residual error of the previous    | 100%           |
+| XGBoost            | Same as Gradient Boosting but faster and more optimised  | 100%           |
+
+**XGBoost** is the go-to for most real-world projects — it's fast, handles missing values, and almost always gives top results.
+
+> Note: XGBoost requires numeric labels. If your target is text (like 'setosa'), encode it with `LabelEncoder` first. Sklearn models are fine with strings, XGBoost is not.
+
+---
+
+## Bagging vs Boosting at a Glance
+
+| | Bagging (Random Forest) | Boosting (XGBoost etc.) |
+| --- | --- | --- |
+| Models train... | In parallel, independently | In sequence, each learning from the last |
+| Focus | Reduce variance (inconsistency) | Reduce bias (systematic errors) |
+| Risk | Slower if forest is huge | Can overfit if too many rounds |
+| Typical use | When one tree overfits | When you want the best possible accuracy |
+
+---
+
+_Part of the Algorithms/Model_Tuning series._

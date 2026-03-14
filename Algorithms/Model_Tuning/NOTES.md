@@ -660,4 +660,170 @@ Best: `n_neighbors=11, weights=distance, metric=euclidean` at 98.67%. Same as th
 
 ---
 
-_Part of the Algorithms/Unsupervised/Model_Tuning series._
+---
+
+# Ensemble Methods — Notes
+
+> Files: `ensemble_learning.py`, `ensemble_methods.py` | Dataset: Iris
+
+---
+
+## The Core Idea
+
+One model is like one person's opinion. It might be right most of the time, but it has blind spots. A group of models is like a panel of experts — their individual errors tend to cancel each other out, and the consensus is more reliable.
+
+The three ways to build an ensemble:
+
+1. **Stacking** — different models, a second model combines their answers
+2. **Bagging** — same model type, many copies, each trained on a random data slice, majority vote
+3. **Boosting** — same model type, trained in sequence, each one correcting the last one's mistakes
+
+---
+
+## Stacking in Depth
+
+### How it works
+
+```
+Step 1: Train base learners on training data
+        DecisionTree  → predictions on training folds
+        SVM           → predictions on training folds
+        LogisticReg   → predictions on training folds
+
+Step 2: Use those predictions as INPUT to the meta-learner
+        Meta-learner learns: when Tree says X and SVM says Y, the answer is usually Z
+
+Step 3: At test time:
+        Base learners predict → meta-learner makes final call
+```
+
+### Why cv=5 in StackingClassifier?
+
+The base learners can't train and then predict on the same data — they'd just memorise it, making the meta-learner's job meaningless. So sklearn uses cross-validation internally: train each base learner on 4 folds, predict on the 5th, rotate, and the meta-learner gets trained on predictions the base models never saw.
+
+### In code
+
+```python
+base_learners = [
+    ('dt', DecisionTreeClassifier(random_state=42)),
+    ('svc', SVC(probability=True, kernel='rbf', random_state=42)),
+    ('lr', LogisticRegression(max_iter=1000))
+]
+meta_learner = LogisticRegression(max_iter=1000)
+
+stacking = StackingClassifier(estimators=base_learners, final_estimator=meta_learner, cv=5)
+stacking.fit(X_train, y_train)
+```
+
+`probability=True` on SVC makes it output a probability (e.g. 0.87 for setosa) rather than just a label. The meta-learner can use those probabilities as richer input.
+
+---
+
+## Bagging — Random Forest
+
+### The idea
+
+Random Forest builds 100 (or however many you set with `n_estimators`) decision trees. Each one gets:
+- A random sample of rows (with replacement — some rows may appear twice, some not at all)
+- A random subset of features to consider at each split
+
+Then it takes a majority vote.
+
+### Why this helps
+
+A single decision tree is prone to overfitting — it memorises the training data and then does badly on new data. But when you average 100 slightly different trees, the overfitting in each tree cancels out. The average is much more stable.
+
+### In code
+
+```python
+rf = RandomForestClassifier(n_estimators=100, max_depth=None, random_state=42)
+rf.fit(X_train, y_train)
+```
+
+`max_depth=None` means trees grow until they're pure — fine for Random Forest because the ensemble effect contains the overfitting.
+
+---
+
+## Boosting — AdaBoost, Gradient Boosting, XGBoost
+
+### AdaBoost
+
+Stands for Adaptive Boosting.
+
+- Start with equal weight on all rows
+- Train model, check which rows it got wrong
+- Increase the weight on wrong rows, decrease weight on correct rows
+- Next model sees the reweighted data and focuses more on the hard cases
+- Repeat 100 times, final answer = weighted vote of all rounds
+
+Result on Iris: 93.3% — decent but not the best.
+
+### Gradient Boosting
+
+- Same sequence idea, but uses a smarter mechanism: each new tree tries to predict the **residual error** (the gap between what the model predicted and the actual answer)
+- `learning_rate=0.1` means each new tree contributes 10% of its correction — small steps, more careful improvement
+- After 100 rounds of 10% corrections, the cumulative error shrinks significantly
+
+Result on Iris: 100%.
+
+### XGBoost
+
+Extreme Gradient Boosting — same concept as Gradient Boosting but:
+- Handles missing values automatically
+- Built-in regularisation to prevent overfitting
+- Runs much faster (parallel processing)
+- The industry standard for tabular data
+
+```python
+xgb = XGBClassifier(n_estimators=100, learning_rate=0.1, max_depth=3,
+                    use_label_encoder=False, eval_metric='mlogloss')
+```
+
+**Important:** XGBoost requires numeric labels. If your target column has strings (like 'setosa'), use `LabelEncoder` to convert them to integers (0, 1, 2) before passing to XGBoost. Sklearn models accept strings, XGBoost does not.
+
+Result on Iris: 100%.
+
+---
+
+## Model Comparison on Iris
+
+| Method             | Type     | Result  | Notes                                          |
+| ------------------ | -------- | ------- | ---------------------------------------------- |
+| Stacking           | Stacking | —      | Most flexible, combines different model types  |
+| Random Forest      | Bagging  | —      | Stable, rarely overfits, great default choice  |
+| AdaBoost           | Boosting | 93.3%   | Older, simpler boosting                        |
+| Gradient Boosting  | Boosting | 100%    | Strong, slower to train                        |
+| XGBoost            | Boosting | 100%    | Fastest, most widely used in practice          |
+
+---
+
+## When to Use Which
+
+| Situation | Recommended |
+| --- | --- |
+| Quick strong baseline | Random Forest |
+| Best possible accuracy on tabular data | XGBoost |
+| You have very different model types and want to combine them | Stacking |
+| Data is noisy, variance is the problem | Bagging (Random Forest) |
+| Bias is the problem (model too simple) | Boosting |
+
+---
+
+## Concept Summary
+
+| Concept | In One Line |
+| --- | --- |
+| **Ensemble** | Combine multiple models to get better results than any one alone |
+| **Bagging** | Same model type, parallel, random subsets, majority vote |
+| **Boosting** | Same model type, sequential, each corrects the last one's errors |
+| **Stacking** | Different model types, a meta-model combines their outputs |
+| **Random Forest** | 100+ decision trees via bagging — the bagging gold standard |
+| **AdaBoost** | Original boosting — reweights wrong examples |
+| **Gradient Boosting** | Corrects residual errors at each step |
+| **XGBoost** | Gradient boosting, faster, more powerful, industry standard |
+| **Meta-learner** | The second-level model in stacking that learns from base model outputs |
+| **probability=True** | Makes SVC output probabilities instead of hard labels — useful for stacking |
+
+---
+
+_Part of the Algorithms/Model_Tuning series._
