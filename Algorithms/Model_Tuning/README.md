@@ -377,8 +377,6 @@ Best combination found:
 
 ---
 
----
-
 # Randomized Search CV — Faster Than Trying Everything
 
 **File:** `random_search.py`
@@ -442,8 +440,6 @@ Still found a 98% result — same as full Grid Search — despite only trying ha
 | 13          | distance | minkowski | 98.0%         | 2    |
 
 Same best result as full Grid Search (`n_neighbors=11, distance weighting`), despite only checking 5 out of 28 options.
-
----
 
 ---
 
@@ -522,11 +518,11 @@ Round 3: New model, rows 7, 15 get extra weight → gets row 15 wrong
 Final prediction = weighted combination of all rounds
 ```
 
-| Algorithm          | How it boosts                                            | Result on Iris |
-| ------------------ | -------------------------------------------------------- | -------------- |
-| AdaBoost           | Misclassified rows get higher weight next round          | 93.3%          |
-| Gradient Boosting  | Each tree corrects the residual error of the previous    | 100%           |
-| XGBoost            | Same as Gradient Boosting but faster and more optimised  | 100%           |
+| Algorithm         | How it boosts                                           | Result on Iris |
+| ----------------- | ------------------------------------------------------- | -------------- |
+| AdaBoost          | Misclassified rows get higher weight next round         | 93.3%          |
+| Gradient Boosting | Each tree corrects the residual error of the previous   | 100%           |
+| XGBoost           | Same as Gradient Boosting but faster and more optimised | 100%           |
 
 **XGBoost** is the go-to for most real-world projects — it's fast, handles missing values, and almost always gives top results.
 
@@ -536,12 +532,12 @@ Final prediction = weighted combination of all rounds
 
 ## Bagging vs Boosting at a Glance
 
-| | Bagging (Random Forest) | Boosting (XGBoost etc.) |
-| --- | --- | --- |
-| Models train... | In parallel, independently | In sequence, each learning from the last |
-| Focus | Reduce variance (inconsistency) | Reduce bias (systematic errors) |
-| Risk | Slower if forest is huge | Can overfit if too many rounds |
-| Typical use | When one tree overfits | When you want the best possible accuracy |
+|                 | Bagging (Random Forest)         | Boosting (XGBoost etc.)                  |
+| --------------- | ------------------------------- | ---------------------------------------- |
+| Models train... | In parallel, independently      | In sequence, each learning from the last |
+| Focus           | Reduce variance (inconsistency) | Reduce bias (systematic errors)          |
+| Risk            | Slower if forest is huge        | Can overfit if too many rounds           |
+| Typical use     | When one tree overfits          | When you want the best possible accuracy |
 
 ---
 

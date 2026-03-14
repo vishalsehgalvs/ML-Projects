@@ -64,10 +64,8 @@ KNN_score = model_KNN.score(X_test, y_test)
 model_SVM = SVC(gamma='auto', C=10, kernel='linear')
 model_SVM.fit(X_train, y_train)
 score_svm = model_SVM.score(X_test, y_test)
-# print(score_svm) with cv =30 and kernel as rbf
-# 0.98
-# print(score_svm) with cv as 10 and kernel as linear
-# 0.98
+# print(score_svm) with C=30 and kernel rbf: 0.98
+# print(score_svm) with C=10 and kernel linear: 0.98
 # --------------------------------
 # Manually changing settings is getting tedious and unreliable.
 # Too many combinations to try by hand, and no way to know which is best.
@@ -109,16 +107,10 @@ pd.set_option('display.width', None)         # avoid wrapping
 
 # Best setting found: C=1 with rbf (or linear) — lower C = more relaxed boundary = less overfitting.
 # --------------- Now doing the same Grid Search for KNN --------------------------------
-# KNeighborsClassifier params: https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html
-# n_neighbors: Any = 5,
-#              *,
-#              weights: Any = "uniform",
-#              algorithm: Any = "auto",
-#              leaf_size: Any = 30,
-#              p: Any = 2,
-#              metric: Any = "minkowski",
-#              metric_params: Any = None,
-#              n_jobs: Any = None) -> None
+# KNN params we're tuning:
+#   n_neighbors  — how many nearby points get to vote (trying 3 to 15)
+#   weights      — 'uniform' = equal vote, 'distance' = closer neighbours count more
+#   metric       — how distance is calculated ('minkowski' is standard Euclidean in most cases)
 classifier_KNN = GridSearchCV((model_KNN), param_grid={
     'n_neighbors': [3, 5, 7, 9, 11, 13, 15],
     'weights': ['uniform', 'distance'],

@@ -724,6 +724,7 @@ stacking.fit(X_train, y_train)
 ### The idea
 
 Random Forest builds 100 (or however many you set with `n_estimators`) decision trees. Each one gets:
+
 - A random sample of rows (with replacement — some rows may appear twice, some not at all)
 - A random subset of features to consider at each split
 
@@ -769,6 +770,7 @@ Result on Iris: 100%.
 ### XGBoost
 
 Extreme Gradient Boosting — same concept as Gradient Boosting but:
+
 - Handles missing values automatically
 - Built-in regularisation to prevent overfitting
 - Runs much faster (parallel processing)
@@ -787,42 +789,42 @@ Result on Iris: 100%.
 
 ## Model Comparison on Iris
 
-| Method             | Type     | Result  | Notes                                          |
-| ------------------ | -------- | ------- | ---------------------------------------------- |
-| Stacking           | Stacking | —      | Most flexible, combines different model types  |
-| Random Forest      | Bagging  | —      | Stable, rarely overfits, great default choice  |
-| AdaBoost           | Boosting | 93.3%   | Older, simpler boosting                        |
-| Gradient Boosting  | Boosting | 100%    | Strong, slower to train                        |
-| XGBoost            | Boosting | 100%    | Fastest, most widely used in practice          |
+| Method            | Type     | Result | Notes                                         |
+| ----------------- | -------- | ------ | --------------------------------------------- |
+| Stacking          | Stacking | —      | Most flexible, combines different model types |
+| Random Forest     | Bagging  | —      | Stable, rarely overfits, great default choice |
+| AdaBoost          | Boosting | 93.3%  | Older, simpler boosting                       |
+| Gradient Boosting | Boosting | 100%   | Strong, slower to train                       |
+| XGBoost           | Boosting | 100%   | Fastest, most widely used in practice         |
 
 ---
 
 ## When to Use Which
 
-| Situation | Recommended |
-| --- | --- |
-| Quick strong baseline | Random Forest |
-| Best possible accuracy on tabular data | XGBoost |
-| You have very different model types and want to combine them | Stacking |
-| Data is noisy, variance is the problem | Bagging (Random Forest) |
-| Bias is the problem (model too simple) | Boosting |
+| Situation                                                    | Recommended             |
+| ------------------------------------------------------------ | ----------------------- |
+| Quick strong baseline                                        | Random Forest           |
+| Best possible accuracy on tabular data                       | XGBoost                 |
+| You have very different model types and want to combine them | Stacking                |
+| Data is noisy, variance is the problem                       | Bagging (Random Forest) |
+| Bias is the problem (model too simple)                       | Boosting                |
 
 ---
 
 ## Concept Summary
 
-| Concept | In One Line |
-| --- | --- |
-| **Ensemble** | Combine multiple models to get better results than any one alone |
-| **Bagging** | Same model type, parallel, random subsets, majority vote |
-| **Boosting** | Same model type, sequential, each corrects the last one's errors |
-| **Stacking** | Different model types, a meta-model combines their outputs |
-| **Random Forest** | 100+ decision trees via bagging — the bagging gold standard |
-| **AdaBoost** | Original boosting — reweights wrong examples |
-| **Gradient Boosting** | Corrects residual errors at each step |
-| **XGBoost** | Gradient boosting, faster, more powerful, industry standard |
-| **Meta-learner** | The second-level model in stacking that learns from base model outputs |
-| **probability=True** | Makes SVC output probabilities instead of hard labels — useful for stacking |
+| Concept               | In One Line                                                                 |
+| --------------------- | --------------------------------------------------------------------------- |
+| **Ensemble**          | Combine multiple models to get better results than any one alone            |
+| **Bagging**           | Same model type, parallel, random subsets, majority vote                    |
+| **Boosting**          | Same model type, sequential, each corrects the last one's errors            |
+| **Stacking**          | Different model types, a meta-model combines their outputs                  |
+| **Random Forest**     | 100+ decision trees via bagging — the bagging gold standard                 |
+| **AdaBoost**          | Original boosting — reweights wrong examples                                |
+| **Gradient Boosting** | Corrects residual errors at each step                                       |
+| **XGBoost**           | Gradient boosting, faster, more powerful, industry standard                 |
+| **Meta-learner**      | The second-level model in stacking that learns from base model outputs      |
+| **probability=True**  | Makes SVC output probabilities instead of hard labels — useful for stacking |
 
 ---
 
