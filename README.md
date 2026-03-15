@@ -6,8 +6,8 @@ A learning portfolio built while going through machine learning from scratch —
 
 ```
 ML-Projects/
-├── Notes/          — personal study notes (AI vs ML, supervised vs unsupervised, key concepts)
-├── Algorithms/     — algorithm exercises using the same Titanic dataset so results are comparable
+├── Notes/              — personal study notes (AI vs ML, supervised vs unsupervised, key concepts)
+├── Algorithms/         — algorithm exercises organised by learning type
 │   ├── Supervised/
 │   │   ├── Regression/         — Linear Regression (Ford used car price prediction)
 │   │   └── Classification/     — 5 classifiers compared head to head on Titanic survival
@@ -16,13 +16,31 @@ ML-Projects/
 │   │       ├── Naive_Bayes/
 │   │       ├── Decision_Tree/
 │   │       └── SVM/
-│   └── Unsupervised/       — Clustering, Dimensionality Reduction (🔜 coming)
-└── Projects/       — real-world applied work on actual datasets
+│   ├── Unsupervised/
+│   │   └── Clustering_Algorithm/
+│   │       ├── K_Mean_Clustering/                — centroid-based clustering + elbow method
+│   │       ├── DBSCAN_Algorithm/                 — density-based clustering, handles any shape
+│   │       └── Dimensionality_Reduction_Algorithm/ — PCA (feature reduction) + t-SNE (visualisation)
+│   └── Model_Tuning/   — Grid Search, Random Search, Ensemble Learning
+└── Projects/           — real-world applied work on actual datasets
     ├── Insurance_Premium_Prediction/    — EDA + Linear Regression on Kaggle insurance premiums
     ├── Heart_Disease_EDA/               — EDA, cleaning, encoding and scaling on heart disease data
     └── Heart_Disease_Model_Comparison/  — compare all 5 classifiers on heart disease data + app
         └── Heart_Disease_Prediction_App/ — Streamlit app for live heart disease risk prediction
 ```
+
+## Unsupervised Algorithms
+
+Three algorithms covering clustering and dimensionality reduction:
+
+| Algorithm | Type                     | What it does                                                                                                 |
+| --------- | ------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| K-Means   | Clustering               | Groups data into K circular clusters using centroids. Use the elbow method to pick K.                        |
+| DBSCAN    | Clustering               | Groups by density rather than distance. Handles crescents, rings, any shape. Marks outliers as noise.        |
+| PCA       | Dimensionality Reduction | Compresses many features into fewer while keeping the most important variation. Use before training a model. |
+| t-SNE     | Visualisation            | Maps high-dimensional data to 2D so you can see structure and clusters. Not for model training.              |
+
+---
 
 ## Algorithms — Titanic Survival (Classification)
 

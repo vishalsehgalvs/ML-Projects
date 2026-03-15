@@ -38,11 +38,14 @@ DBSCAN doesn't need you to pick K. Instead, you give it two things:
 
 ## The Clusters — Side by Side with K-Means
 
-This is what DBSCAN produces on the same crescent moon dataset that K-Means completely fails on:
+Both plots below use the exact same crescent moon dataset. The only difference is the algorithm:
 
-![DBSCAN Clusters](images/dbscan%20clusters.png)
+|                                                         K-Means — fails on this shape                                                          |                                         DBSCAN — handles it correctly                                         |
+| :--------------------------------------------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------: |
+| ![K-Means Failure](../K_Mean_Clustering/k_mean_clustering_images/failure%20of%20k%20mean%20clustering%20when%20data%20is%20not%20circulat.png) |                               ![DBSCAN Clusters](images/dbscan%20clusters.png)                                |
+|                          Cuts straight down the middle. Points from both crescents end up mixed in the same cluster.                           | Follows the density trail. Each crescent is its own cluster. Outliers are marked as noise (shown separately). |
 
-DBSCAN correctly identifies the two crescent shapes as separate clusters, and handles any outlier points by labelling them as noise. K-Means would just cut the data in half with a straight line and call it done.
+K-Means draws a straight boundary between its two centroids — it has no way to follow a curve. DBSCAN doesn't use centroids at all. It just asks: is this point in a dense neighbourhood? If yes, follow the trail. The trail naturally follows the shape of the crescent.
 
 ---
 
