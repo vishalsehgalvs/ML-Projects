@@ -39,7 +39,7 @@ The model looks at all the data and puts similar things together into groups (ca
 
 Practical example: a company has 50,000 customers. No one's manually tagged them. Run clustering and you might get back 4 groups — people who buy once and never return, people who browse a lot but rarely buy, loyal weekly shoppers, and bulk buyers. The model found those groups from the data alone.
 
-Will cover: K-Means, DBSCAN, Hierarchical Clustering
+Covered here: K-Means, DBSCAN — Hierarchical Clustering not covered yet
 
 ---
 
@@ -49,7 +49,7 @@ Some datasets have hundreds or thousands of columns. A lot of those columns are 
 
 Practical example: a medical dataset has 800 test results per patient. Many of those tests are correlated. You can compress them down to 40 "summary" columns that capture 95% of the same information. Smaller, faster, often just as accurate.
 
-Will cover: PCA, t-SNE
+Covered here: PCA, t-SNE
 
 ---
 
@@ -58,6 +58,8 @@ Will cover: PCA, t-SNE
 Train on normal data, then flag anything that looks unusual.
 
 Practical example: a model trained on millions of normal bank transactions learns what "normal" looks like. When a transaction comes in that doesn't match those patterns — a $5,000 purchase at 3am in a country the account has never been used in — it flags it. No one told it what fraud looks like. It just knows what's out of place.
+
+> Not covered in this folder yet — anomaly detection is a separate topic for a later session.
 
 ---
 
@@ -70,7 +72,7 @@ Practical example: a model trained on millions of normal bank transactions learn
 
 ---
 
-## What's Coming in This Folder
+## What's in This Folder
 
 | Folder                                                     | What it covers                                       | Status |
 | ---------------------------------------------------------- | ---------------------------------------------------- | ------ |
@@ -82,20 +84,38 @@ Practical example: a model trained on millions of normal bank transactions learn
 
 ---
 
+## K-Means vs DBSCAN — Side by Side
+
+Both plots below use the exact same crescent moon dataset. The only thing that changes is the algorithm used to group the data.
+
+|                                                                  K-Means — fails on this shape                                                                   |                                     DBSCAN — handles it correctly                                      |
+| :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
+| ![K-Means Failure](Clustering_Algorithm/K_Mean_Clustering/k_mean_clustering_images/failure%20of%20k%20mean%20clustering%20when%20data%20is%20not%20circulat.png) |         ![DBSCAN Clusters](Clustering_Algorithm/DBSCAN_Algorithm/images/dbscan%20clusters.png)         |
+|                                  Draws a straight line between two centroids. Points from both crescents end up mixed together.                                  | Follows the density trail. Each crescent becomes its own cluster. Isolated points are marked as noise. |
+
+**Why does K-Means fail here?**
+K-Means assigns every point to its nearest centroid and draws straight-line boundaries between them. For crescent-shaped data, both centroids end up floating in the gap between the curves — not actually inside either crescent. So it slices the data down the middle and misclassifies half the points.
+
+**Why does DBSCAN handle it?**
+DBSCAN has no centroids. It just looks at each point and asks: are there enough nearby points to call this a dense region? It then follows the density from point to point — and that trail naturally follows the curve of the crescent, picking up the whole shape correctly.
+
+This is the single clearest example of why choosing the right algorithm for your data shape matters.
+
+---
+
+## Which Algorithm Should I Use?
+
+A quick cheat sheet for picking the right one:
+
+| Situation | Go with |
+| --------- | ------- |
+| Your data forms round blob-shaped groups and you have a rough idea of how many groups | K-Means |
+| Your data has irregular shapes — curves, rings, crescents — or you don't know how many clusters | DBSCAN |
+| You have too many features and want to reduce them before training a model | PCA |
+| You just want to visualise the structure of your data in 2D | t-SNE |
+| You want to find outliers or unusual records | DBSCAN (noise points) or a dedicated anomaly detection algorithm |
+| You're not sure — exploring the data for the first time | Start with K-Means to see if any obvious groups emerge, then try DBSCAN if the shapes look irregular |
+
+---
+
 _Part of the Algorithms/ series._
-
-we have to initialise k -vvlaye
-outliers will move the centre points
-only fir for centroid based data
-
-DBSCAN:
-density based clustering of application with noise
-
--non -parametric algo.
-epeselon distance is calculated
-on trial basis the algorithm calculates the ditance and everything within the imaginary distance/circle is considered as cluster
-everything inside epsielon distance is considered as as closter
-
-remember to compare dbscan cluster with k mean cluster and take the cluster image from images folder please
-
-dimensionality reduction algorithm
