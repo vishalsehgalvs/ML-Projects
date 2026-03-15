@@ -78,9 +78,9 @@ Use t-SNE when you want to see what's going on in your data visually. It's not s
 
 ## Files in This Folder
 
-| File                                    | What it does                                                                                 |
-| --------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `dimensionality_reduction_algorithm.py` | PCA and t-SNE on the Iris dataset — reduces 4 features to 2 for model prep and visualisation |
+| File                                    | What it does       |
+| --------------------------------------- | ------------------ |
+| `dimensionality_reduction_algorithm.py` | Code not added yet |
 
 ---
 

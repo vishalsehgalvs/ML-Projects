@@ -39,7 +39,7 @@ The model looks at all the data and puts similar things together into groups (ca
 
 Practical example: a company has 50,000 customers. No one's manually tagged them. Run clustering and you might get back 4 groups — people who buy once and never return, people who browse a lot but rarely buy, loyal weekly shoppers, and bulk buyers. The model found those groups from the data alone.
 
-Covered here: K-Means, DBSCAN — Hierarchical Clustering not covered yet
+Covered here: K-Means, DBSCAN
 
 ---
 
@@ -50,16 +50,6 @@ Some datasets have hundreds or thousands of columns. A lot of those columns are 
 Practical example: a medical dataset has 800 test results per patient. Many of those tests are correlated. You can compress them down to 40 "summary" columns that capture 95% of the same information. Smaller, faster, often just as accurate.
 
 Covered here: PCA, t-SNE
-
----
-
-### Anomaly Detection — spotting what doesn't belong
-
-Train on normal data, then flag anything that looks unusual.
-
-Practical example: a model trained on millions of normal bank transactions learns what "normal" looks like. When a transaction comes in that doesn't match those patterns — a $5,000 purchase at 3am in a country the account has never been used in — it flags it. No one told it what fraud looks like. It just knows what's out of place.
-
-> Not covered in this folder yet — anomaly detection is a separate topic for a later session.
 
 ---
 
@@ -74,11 +64,11 @@ Practical example: a model trained on millions of normal bank transactions learn
 
 ## What's in This Folder
 
-| Folder                                                     | What it covers                                       | Status |
-| ---------------------------------------------------------- | ---------------------------------------------------- | ------ |
-| `Clustering_Algorithm/K_Mean_Clustering/`                  | K-Means — centroid-based clustering, elbow method    | Done   |
-| `Clustering_Algorithm/DBSCAN_Algorithm/`                   | DBSCAN — density-based clustering, handles any shape | Done   |
-| `Clustering_Algorithm/Dimensionality_Reduction_Algorithm/` | PCA, t-SNE — compressing high-dimensional data       | Done   |
+| Folder                                                     | What it covers                                       | Status                            |
+| ---------------------------------------------------------- | ---------------------------------------------------- | --------------------------------- |
+| `Clustering_Algorithm/K_Mean_Clustering/`                  | K-Means — centroid-based clustering, elbow method    | Done                              |
+| `Clustering_Algorithm/DBSCAN_Algorithm/`                   | DBSCAN — density-based clustering, handles any shape | Done                              |
+| `Clustering_Algorithm/Dimensionality_Reduction_Algorithm/` | PCA, t-SNE — compressing high-dimensional data       | Notes & README done — code coming |
 
 > Model Tuning stuff (cross-validation, grid search, ensemble methods) is in `Algorithms/Model_Tuning/` — that applies to any kind of model so it lives one level up, not here.
 
@@ -107,14 +97,14 @@ This is the single clearest example of why choosing the right algorithm for your
 
 A quick cheat sheet for picking the right one:
 
-| Situation | Go with |
-| --------- | ------- |
-| Your data forms round blob-shaped groups and you have a rough idea of how many groups | K-Means |
-| Your data has irregular shapes — curves, rings, crescents — or you don't know how many clusters | DBSCAN |
-| You have too many features and want to reduce them before training a model | PCA |
-| You just want to visualise the structure of your data in 2D | t-SNE |
-| You want to find outliers or unusual records | DBSCAN (noise points) or a dedicated anomaly detection algorithm |
-| You're not sure — exploring the data for the first time | Start with K-Means to see if any obvious groups emerge, then try DBSCAN if the shapes look irregular |
+| Situation                                                                                       | Go with                                                                                              |
+| ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| Your data forms round blob-shaped groups and you have a rough idea of how many groups           | K-Means                                                                                              |
+| Your data has irregular shapes — curves, rings, crescents — or you don't know how many clusters | DBSCAN                                                                                               |
+| You have too many features and want to reduce them before training a model                      | PCA                                                                                                  |
+| You just want to visualise the structure of your data in 2D                                     | t-SNE                                                                                                |
+| You want to find outliers or unusual records                                                    | DBSCAN — noise points (label = -1) are the outliers                                                  |
+| You're not sure — exploring the data for the first time                                         | Start with K-Means to see if any obvious groups emerge, then try DBSCAN if the shapes look irregular |
 
 ---
 

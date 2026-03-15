@@ -1,14 +1,7 @@
 # ============================================================
 # DIMENSIONALITY REDUCTION — PCA AND t-SNE
 # ============================================================
-# Real datasets often have many features (columns). More features
-# means slower training, sparseness, and overfitting risk.
-#
-# This file demonstrates two techniques:
-#   PCA  — compresses features while keeping the most important
-#           variation. Use before training a model.
-#   t-SNE — maps data to 2D purely for visualisation. Not for
-#            feeding into a model.
+# Code coming soon.
 # ============================================================
 
 import numpy as np
