@@ -16,7 +16,7 @@ from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-# importing state vector machine model libraries
+# importing Support Vector Machine model libraries
 from sklearn.svm import SVC
 # Evaluation tools — same as Logistic Regression and KNN
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report

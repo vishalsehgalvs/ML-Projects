@@ -51,7 +51,7 @@ K-Means has a hard limitation: it only works when clusters are roughly circular 
 
 When your data has a different shape — like two crescent moons facing each other — K-Means gets confused. It draws straight boundaries and splits clusters incorrectly.
 
-![K-Means Failure on Non-Circular Data](k_mean_clustering_images/failure%20of%20k%20mean%20clustering%20when%20data%20is%20not%20circulat.png)
+![K-Means Failure on Non-Circular Data](k_mean_clustering_images/failure%20of%20k%20mean%20clustering%20when%20data%20is%20not%20circular.png)
 
 This is exactly why DBSCAN was invented. DBSCAN handles these irregular shapes easily — see `../DBSCAN_Algorithm/` for a direct comparison.
 

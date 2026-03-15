@@ -55,7 +55,7 @@ This is my first ML project. I picked up a Kaggle insurance dataset and worked t
 
 ![Children Distribution](images/children%20plot%20distribution.png)
 ![Children Count Plot](images/children%20count%20plot.png)
-![Children Boxplot](images/children%20boxplot'.png)
+![Children Boxplot](images/children%20boxplot.png)
 
 ### Charges Analysis
 

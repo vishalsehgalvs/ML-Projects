@@ -80,7 +80,7 @@ Both plots below use the exact same crescent moon dataset. The only thing that c
 
 |                                                                  K-Means — fails on this shape                                                                   |                                     DBSCAN — handles it correctly                                      |
 | :--------------------------------------------------------------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
-| ![K-Means Failure](Clustering_Algorithm/K_Mean_Clustering/k_mean_clustering_images/failure%20of%20k%20mean%20clustering%20when%20data%20is%20not%20circulat.png) |         ![DBSCAN Clusters](Clustering_Algorithm/DBSCAN_Algorithm/images/dbscan%20clusters.png)         |
+| ![K-Means Failure](Clustering_Algorithm/K_Mean_Clustering/k_mean_clustering_images/failure%20of%20k%20mean%20clustering%20when%20data%20is%20not%20circular.png) |         ![DBSCAN Clusters](Clustering_Algorithm/DBSCAN_Algorithm/images/dbscan%20clusters.png)         |
 |                                  Draws a straight line between two centroids. Points from both crescents end up mixed together.                                  | Follows the density trail. Each crescent becomes its own cluster. Isolated points are marked as noise. |
 
 **Why does K-Means fail here?**
