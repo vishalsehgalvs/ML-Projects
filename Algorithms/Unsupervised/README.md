@@ -64,11 +64,11 @@ Covered here: PCA, t-SNE
 
 ## What's in This Folder
 
-| Folder                                                     | What it covers                                       | Status                            |
-| ---------------------------------------------------------- | ---------------------------------------------------- | --------------------------------- |
-| `Clustering_Algorithm/K_Mean_Clustering/`                  | K-Means — centroid-based clustering, elbow method    | Done                              |
-| `Clustering_Algorithm/DBSCAN_Algorithm/`                   | DBSCAN — density-based clustering, handles any shape | Done                              |
-| `Clustering_Algorithm/Dimensionality_Reduction_Algorithm/` | PCA, t-SNE — compressing high-dimensional data       | Notes & README done — code coming |
+| Folder                                                     | What it covers                                       | Status |
+| ---------------------------------------------------------- | ---------------------------------------------------- | ------ |
+| `Clustering_Algorithm/K_Mean_Clustering/`                  | K-Means — centroid-based clustering, elbow method    | Done   |
+| `Clustering_Algorithm/DBSCAN_Algorithm/`                   | DBSCAN — density-based clustering, handles any shape | Done   |
+| `Clustering_Algorithm/Dimensionality_Reduction_Algorithm/` | PCA — compressing high-dimensional data              | Done   |
 
 > Model Tuning stuff (cross-validation, grid search, ensemble methods) is in `Algorithms/Model_Tuning/` — that applies to any kind of model so it lives one level up, not here.
 

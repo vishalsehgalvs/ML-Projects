@@ -1,106 +1,55 @@
 # ============================================================
-# DIMENSIONALITY REDUCTION — PCA AND t-SNE
-# ============================================================
-# Code coming soon.
+# DIMENSIONALITY REDUCTION — Principle Component Analysis
 # ============================================================
 
-import numpy as np
+# importing required libraries
 import pandas as pd
-import matplotlib.pyplot as plt
 import seaborn as sns
-from sklearn.datasets import load_iris           # 4-feature dataset — good for reduction demo
+import matplotlib.pyplot as plt
+from sklearn.datasets import make_blobs
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-from sklearn.manifold import TSNE
 
-# -------------------------------------------------------
-# STEP 1 — Load the Iris dataset
-# 150 flowers, 4 measurements each:
-#   sepal length, sepal width, petal length, petal width
-# 3 species: setosa, versicolor, virginica
-# We'll reduce 4 dimensions down to 2 so we can plot it
-# -------------------------------------------------------
-iris = load_iris()
-X = iris.data          # shape (150, 4) — 150 samples, 4 features
-y = iris.target        # 0, 1, or 2 — the species label
-feature_names = iris.feature_names
-target_names = iris.target_names
+X,y = make_blobs(n_samples=500,n_features=5,centers=3,cluster_std=1.5,random_state=42)
+# print(X)
+# [[ -9.85712583   9.52196609   6.40680626  -6.81757623  -7.86054541]
+#  [ -8.04717781   8.40261648   6.40946097  -4.33576029  -6.70289196]
+#  [ -3.73690895   6.7601386    4.24877609   0.28504117  -7.10318219]
+#  ...
+#  [ -5.82805     -7.29173339   7.48633693   2.71623974   7.33823548]
+#  [ -2.48648271   9.67739715   6.21190845   1.03031506  -7.54637531]
+#  [ -8.63901448 -10.68852991   8.36601977   4.94211449   3.77070371]]
 
-df = pd.DataFrame(X, columns=feature_names)
-df['species'] = [target_names[label] for label in y]
-
-# -------------------------------------------------------
-# STEP 2 — Scale the features before PCA
-# PCA is based on variance. A feature ranging 0-10,000 would
-# completely overshadow a feature ranging 0-1.
-# StandardScaler puts everything on the same scale first.
-# -------------------------------------------------------
 scaler = StandardScaler()
-X_scaled = scaler.fit_transform(df[feature_names])
+X_scaled = scaler.fit_transform(X)
+# print(X_scaled)
+# [[-1.07039133  0.74546814  0.0859273  -1.58466105 -0.90798501]
+#  [-0.52251206  0.61451192  0.08731966 -0.95761934 -0.68801347]
+#  [ 0.78222538  0.4223533  -1.04593191  0.20984645 -0.76407462]
+#  ...
+#  [ 0.14922774 -1.22161917  0.65212732  0.82409945  1.98001159]
+#  [ 1.16073493  0.7636525  -0.01629411  0.39814317 -0.84828797]
+#  [-0.70166364 -1.61902103  1.11350971  1.38647649  1.30212699]]
 
-# -------------------------------------------------------
-# STEP 3A — PCA: reduce 4 features down to 2 components
-# The two principal components capture the two directions
-# where the data varies the most.
-# -------------------------------------------------------
-pca = PCA(n_components=2, random_state=42)
+pca = PCA(n_components=2)
 X_pca = pca.fit_transform(X_scaled)
+# print(X_pca)
+# [[ 1.40522818e+00 -1.73079914e+00]
+#  [ 1.03463536e+00 -9.82792414e-01]
+#  [ 1.10182830e+00  1.09084050e+00]
+# .......500
 
-# How much of the original information does each component keep?
-print("Variance explained by each component:")
-print(f"  PC1: {pca.explained_variance_ratio_[0]*100:.1f}%")
-print(f"  PC2: {pca.explained_variance_ratio_[1]*100:.1f}%")
-print(f"  Total: {sum(pca.explained_variance_ratio_)*100:.1f}%")
-# Expected output:
-#   PC1: 72.9%
-#   PC2: 22.8%
-#   Total: 95.7%
-# So just 2 components already capture 95.7% of all the information
+df_pca = pd.DataFrame(X_pca,columns=['PC1','PC2'])
+df_pca['label'] = y
 
-df_pca = pd.DataFrame(X_pca, columns=['PC1', 'PC2'])
-df_pca['species'] = df['species']
-
-# -------------------------------------------------------
-# STEP 3B — PCA with auto-select (keep 95% of variance)
-# Instead of picking 2 manually, tell PCA to keep however
-# many components it takes to explain 95% of the variance.
-# -------------------------------------------------------
-pca_auto = PCA(n_components=0.95, random_state=42)
-X_pca_auto = pca_auto.fit_transform(X_scaled)
-print(f"\nComponents needed to explain 95% variance: {pca_auto.n_components_}")
-
-# -------------------------------------------------------
-# STEP 4 — Plot the PCA result
-# We can now visualise 4 dimensions in a 2D scatter plot
-# by plotting PC1 vs PC2
-# -------------------------------------------------------
-sns.scatterplot(x=df_pca['PC1'],
-                y=df_pca['PC2'],
-                hue=df_pca['species'],
-                palette='tab10')
-plt.title('PCA — Iris dataset reduced to 2 dimensions')
-plt.xlabel('Principal Component 1')
-plt.ylabel('Principal Component 2')
+sns.scatterplot(data=df_pca,x='PC1',y='PC2',hue = 'label',palette = 'Set2')
 plt.show()
 
-# -------------------------------------------------------
-# STEP 5 — t-SNE: reduce 4 features to 2D for visualisation
-# t-SNE shuffles points around in 2D to keep neighbouring
-# points close together. Great for seeing cluster structure.
-# Note: t-SNE results change with perplexity and random_state.
-# Do not use t-SNE output as input to a model — for viz only.
-# -------------------------------------------------------
-tsne = TSNE(n_components=2, perplexity=30, random_state=42)
-X_tsne = tsne.fit_transform(X_scaled)
 
-df_tsne = pd.DataFrame(X_tsne, columns=['TSNE_1', 'TSNE_2'])
-df_tsne['species'] = df['species']
 
-sns.scatterplot(x=df_tsne['TSNE_1'],
-                y=df_tsne['TSNE_2'],
-                hue=df_tsne['species'],
-                palette='tab10')
-plt.title('t-SNE — Iris dataset visualised in 2D')
-plt.xlabel('t-SNE dimension 1')
-plt.ylabel('t-SNE dimension 2')
-plt.show()
+
+
+
+
+
+
