@@ -1,0 +1,679 @@
+# Machine Learning — A Beginner's Complete Guide
+
+> Written in plain English. No PhD required.
+
+---
+
+## Table of Contents
+
+1. [Problem Definition](#1-problem-definition)
+2. [Data Collection](#2-data-collection)
+3. [Exploratory Data Analysis (EDA)](#3-exploratory-data-analysis-eda)
+4. [Data Cleaning & Preprocessing](#4-data-cleaning--preprocessing)
+5. [Train-Test Split](#5-train-test-split)
+6. [Choosing the Right Model](#6-choosing-the-right-model)
+7. [Model Training](#7-model-training)
+8. [Evaluation Metrics](#8-evaluation-metrics)
+9. [Hyperparameter Tuning](#9-hyperparameter-tuning)
+
+---
+
+## The Big Picture — How It All Flows
+
+```mermaid
+flowchart TD
+    A([🎯 Problem Definition]) --> B([📦 Data Collection])
+    B --> C([🔍 Exploratory Data Analysis])
+    C --> D([🧹 Data Cleaning & Preprocessing])
+    D --> E([✂️ Train-Test Split])
+    E --> F([🤔 Choose the Right Model])
+    F --> G([🏋️ Model Training])
+    G --> H([📊 Evaluation Metrics])
+    H --> I{Good enough?}
+    I -- No --> J([⚙️ Hyperparameter Tuning])
+    J --> G
+    I -- Yes --> K([🚀 Deploy!])
+```
+
+---
+
+## 1. Problem Definition
+
+### What is it?
+
+Before you write a single line of code, you need to answer one question:
+
+> **"What exactly am I trying to predict or decide?"**
+
+This sounds obvious, but it is where most projects go wrong. Skipping this step is like starting a road trip without knowing the destination.
+
+### Types of Problems in ML
+
+| Type | Question You're Answering | Example |
+|------|--------------------------|---------|
+| **Regression** | How much / how many? | Predict house price |
+| **Classification** | Which category? | Is this email spam or not? |
+| **Clustering** | Which things are similar? | Group customers by behavior |
+| **Recommendation** | What should I suggest? | Netflix "You might like..." |
+
+### Real-World Example
+
+> **Bad definition:** "I want to use AI for my pizza shop."
+>
+> **Good definition:** "I want to predict how many pizzas I will sell tomorrow so I don't waste ingredients."
+
+Now you know:
+- You need **past sales data** (history)
+- The output is a **number** (how many pizzas) → this is a **Regression** problem
+- Success means your prediction is within ±5 pizzas of the actual
+
+### Flow
+
+```mermaid
+flowchart LR
+    A[Business Problem] --> B[Ask: Predict a number?]
+    B -- Yes --> C[Regression]
+    B -- No --> D[Ask: Sort into groups?]
+    D -- Yes --> E[Classification]
+    D -- No --> F[Ask: Find hidden patterns?]
+    F -- Yes --> G[Clustering]
+```
+
+---
+
+## 2. Data Collection
+
+### What is it?
+
+Data is the fuel for your ML model. Garbage in = garbage out. You need to gather relevant, enough, and trustworthy data.
+
+### Where does data come from?
+
+```mermaid
+flowchart TD
+    A[Sources of Data] --> B[Your own databases]
+    A --> C[Public datasets\nKaggle, UCI, government sites]
+    A --> D[Web scraping\nCollect from websites]
+    A --> E[APIs\nTwitter, weather, stocks]
+    A --> F[Surveys / manual entry]
+    A --> G[Sensors / IoT devices]
+```
+
+### Real-World Example
+
+For the pizza shop problem:
+- **Sales records** from your POS system (date, qty sold)
+- **Weather data** from a free API (rainy days = more delivery orders?)
+- **Holiday calendar** (Fridays are busier)
+- **Promotions history** (did a discount run that day?)
+
+### What makes good data?
+
+| Property | What it means | Why it matters |
+|----------|--------------|----------------|
+| **Relevant** | Related to what you're predicting | Irrelevant columns confuse the model |
+| **Sufficient** | Enough rows (usually 1,000+) | Too few = model can't learn patterns |
+| **Recent** | Not outdated | Old patterns may no longer apply |
+| **Balanced** | Classes roughly equal (for classification) | Imbalanced data tricks the model |
+
+> **Tip:** More data almost always beats a fancier algorithm. A simple model trained on 100,000 rows usually beats a complex model trained on 100 rows.
+
+---
+
+## 3. Exploratory Data Analysis (EDA)
+
+### What is it?
+
+EDA is your detective work. Before building anything, you **look around** and understand your data. You ask questions like:
+
+- How many rows and columns do I have?
+- Are there missing values?
+- What does the data look like — min, max, average?
+- Are there weird outliers?
+- How do columns relate to each other?
+
+Think of it like reading the instruction manual before assembling furniture.
+
+### EDA Steps
+
+```mermaid
+flowchart TD
+    A[Load Data] --> B[Check shape\nrows × columns]
+    B --> C[Check data types\nnumbers, text, dates?]
+    C --> D[Look at first few rows]
+    D --> E[Count missing values]
+    E --> F[Descriptive stats\nmean, min, max, std]
+    F --> G[Plot distributions\nhistograms]
+    G --> H[Check correlations\nwhich columns move together?]
+    H --> I[Spot outliers]
+    I --> J[Write down what you found]
+```
+
+### Common EDA Questions & Tools
+
+| Question | Tool / Chart |
+|----------|-------------|
+| What's the spread of values? | Histogram |
+| Any relationship between two columns? | Scatter plot |
+| Any outliers? | Box plot |
+| How often does each category appear? | Bar chart |
+| Which columns are most correlated? | Heatmap |
+
+### Real-World Example
+
+Pizza shop data after EDA reveals:
+- Friday sales are 40% higher than Monday sales → **day of week** is important
+- There are 12 rows where sales = 0 on holidays → might be store closed
+- Weather temperature has a **0.6 correlation** with delivery orders → keep it!
+- One row shows 9,999 pizzas sold → obvious **data entry error**, must fix
+
+> EDA is not about fixing problems yet — just **finding** them. Fixing happens in the next step.
+
+---
+
+## 4. Data Cleaning & Preprocessing
+
+### What is it?
+
+Raw data is messy. Real-world data has missing values, typos, inconsistent formats, and extreme outliers. Preprocessing turns raw data into something the model can actually learn from.
+
+### The Cleaning Pipeline
+
+```mermaid
+flowchart TD
+    A[Raw Data] --> B[Handle Missing Values]
+    B --> C[Fix Outliers]
+    C --> D[Fix Inconsistent Values\neg. 'Male' vs 'male' vs 'M']
+    D --> E[Convert Data Types\ndates, categories, booleans]
+    E --> F[Encode Categorical Columns\ntext → numbers]
+    F --> G[Feature Scaling\nbring all numbers to same range]
+    G --> H[Feature Engineering\ncreate new useful columns]
+    H --> I[Clean Data ✅]
+```
+
+### Handling Missing Values
+
+| Strategy | When to use | Example |
+|----------|-------------|---------|
+| **Drop the row** | Very few missing rows | Only 5 out of 10,000 rows missing |
+| **Fill with mean/median** | Numeric columns, missing randomly | Age column: fill with average age |
+| **Fill with mode** | Categorical columns | City: fill with most common city |
+| **Forward fill** | Time-series data | Yesterday's price fills today's gap |
+| **Predict missing** | Important column, lots missing | Use another model to guess the value |
+
+### Encoding Categorical Data
+
+Models speak numbers, not words. You must convert text categories to numbers.
+
+**One-Hot Encoding** (for unordered categories like Color):
+
+```
+Color: Red → [1, 0, 0]
+Color: Blue → [0, 1, 0]
+Color: Green → [0, 0, 1]
+```
+
+**Label Encoding** (for ordered categories like Size):
+
+```
+Size: Small → 1
+Size: Medium → 2
+Size: Large → 3
+```
+
+### Feature Scaling
+
+Why? Because if one column goes from 0–1 and another from 0–1,000,000, the model will wrongly think the second column is more important.
+
+| Method | Formula | Result Range | When to use |
+|--------|---------|--------------|-------------|
+| **Min-Max Scaling** | (x - min) / (max - min) | 0 to 1 | When you know the range |
+| **Standard Scaling (Z-score)** | (x - mean) / std | -3 to +3 approx | Most common, default choice |
+
+### Feature Engineering
+
+Creating **new columns** from existing ones that help the model:
+
+> **Example:** From a date column, create:
+> - `day_of_week` (Monday=0, Sunday=6)
+> - `is_weekend` (True/False)
+> - `month` (1–12)
+> - `is_holiday` (True/False)
+
+These new columns are often more useful than the raw date.
+
+---
+
+## 5. Train-Test Split
+
+### What is it?
+
+You can't grade your own homework. If the model trains on **all** the data, you have no way to know if it actually learned or just memorized.
+
+So you split the data into:
+- **Training set** — the model studies from this (learns patterns)
+- **Test set** — the model is examined on this (never seen before!)
+
+```mermaid
+flowchart LR
+    A[All Data\n100%] --> B[Training Set\n70–80%]
+    A --> C[Test Set\n20–30%]
+    B --> D[Model Trains Here]
+    C --> E[Model is Tested Here]
+    D --> F[Adjust & Improve]
+    E --> G[Final Score]
+```
+
+### The Typical Split
+
+| Split | Percentage | Purpose |
+|-------|-----------|---------|
+| Train | 70–80% | Model learns from this |
+| Validation | 10–15% | Tune the model during development |
+| Test | 10–20% | Final, untouched evaluation |
+
+> **Golden Rule:** Never look at or use the test set until the very end. Treat it like an exam paper in a sealed envelope.
+
+### Overfitting vs Underfitting
+
+```
+High training accuracy + Low test accuracy = OVERFITTING
+(Model memorized, didn't learn)
+
+Low training accuracy + Low test accuracy = UNDERFITTING
+(Model is too simple, didn't learn enough)
+
+High training accuracy ≈ High test accuracy = JUST RIGHT ✅
+```
+
+```mermaid
+flowchart TD
+    A[Train the Model] --> B{Compare train vs test accuracy}
+    B -- Train high, Test low --> C[Overfitting\nModel memorized the data]
+    B -- Both low --> D[Underfitting\nModel too simple]
+    B -- Both similarly high --> E[Good Fit ✅]
+    C --> F[Fix: More data, simpler model,\nregularization, dropout]
+    D --> G[Fix: More complex model,\nmore features, longer training]
+```
+
+### K-Fold Cross Validation
+
+Instead of one split, you split the data K times and train+test on each fold. This gives a more reliable score.
+
+```
+Fold 1: [TEST] [train] [train] [train] [train]
+Fold 2: [train] [TEST] [train] [train] [train]
+Fold 3: [train] [train] [TEST] [train] [train]
+Fold 4: [train] [train] [train] [TEST] [train]
+Fold 5: [train] [train] [train] [train] [TEST]
+
+Final Score = Average of all 5 scores
+```
+
+---
+
+## 6. Choosing the Right Model
+
+### What is it?
+
+There is no single "best" algorithm. Choosing the right model depends on:
+- What type of problem you have (regression, classification, clustering)
+- How much data you have
+- How interpretable the result needs to be
+- How fast the model needs to run
+
+### Model Selection Flowchart
+
+```mermaid
+flowchart TD
+    A[What kind of problem?] --> B{Labeled data\navailable?}
+    B -- Yes --> C{Predict a number?}
+    B -- No --> D[Unsupervised\nClustering: K-Means, DBSCAN]
+    C -- Yes --> E[Regression]
+    C -- No --> F[Classification]
+
+    E --> E1[Linear Regression\nSimple, fast, interpretable]
+    E --> E2[Decision Tree\nEasy to visualize]
+    E --> E3[Random Forest\nAccurate, robust]
+    E --> E4[XGBoost / LightGBM\nTop performer on structured data]
+    E --> E5[Neural Network\nBest for images, text, audio]
+
+    F --> F1[Logistic Regression\nSimple baseline]
+    F --> F2[K-Nearest Neighbors\nSimple, intuitive]
+    F --> F3[Support Vector Machine\nWorks in high dimensions]
+    F --> F4[Random Forest\nVery reliable]
+    F --> F5[XGBoost / LightGBM\nOften wins competitions]
+    F --> F6[Neural Network\nBest for unstructured data]
+```
+
+### Model Cheat Sheet
+
+| Model | Best For | Pros | Cons |
+|-------|----------|------|------|
+| **Linear Regression** | Predict numbers, simple relationship | Fast, explainable | Can't capture complex patterns |
+| **Logistic Regression** | Binary yes/no classification | Simple, fast, probabilistic | Linear boundaries only |
+| **Decision Tree** | Tabular data, explainable | Visual, intuitive | Overfits easily |
+| **Random Forest** | Almost everything tabular | Accurate, handles missing values | Slow for very large data |
+| **XGBoost / LightGBM** | Competitions, tabular data | Very accurate | Many hyperparameters to tune |
+| **Neural Network** | Images, text, audio | Extremely powerful | Needs lots of data & compute |
+| **K-Means** | Customer segmentation | Simple, scalable | You must specify K manually |
+
+### Real-World Guidance
+
+> **Start simple.** Always try Linear/Logistic Regression first. If it's not good enough, try Random Forest. If still not good enough, try XGBoost. Only use Neural Networks if you have > 10,000 rows and/or unstructured data (images, text).
+
+---
+
+## 7. Model Training
+
+### What is it?
+
+Training is when the model **looks at your training data and figures out the patterns** — adjusting its internal settings (called **weights** or **parameters**) to make better and better predictions.
+
+Think of it like this: The model is a student, the training data is the textbook, and training is the studying process.
+
+### How Training Works (Conceptually)
+
+```mermaid
+flowchart TD
+    A[Start with random guesses] --> B[Make a prediction on training data]
+    B --> C[Compare prediction to real answer\nCalculate the error — called LOSS]
+    C --> D{Is the error small enough?}
+    D -- No --> E[Adjust internal weights\nGradient Descent]
+    E --> B
+    D -- Yes --> F[Training Complete ✅]
+```
+
+### The Key Players
+
+| Term | Plain English Meaning |
+|------|-----------------------|
+| **Loss / Cost** | How wrong the model is right now |
+| **Epoch** | One full pass through all training data |
+| **Batch size** | How many rows the model looks at before updating |
+| **Learning rate** | How big a step the model takes when adjusting |
+| **Gradient Descent** | The math trick the model uses to reduce its error |
+
+### Learning Rate Analogy
+
+Imagine you're blindfolded trying to walk down a hill:
+- **Too large learning rate:** You take huge steps and overshoot the bottom, bouncing around
+- **Too small learning rate:** You take tiny baby steps and never reach the bottom in time
+- **Just right:** Steady steps, reach the bottom efficiently ✅
+
+### Real-World Example (Pizza shop)
+
+```
+Epoch 1: Model predicts 120 pizzas, actual was 80 → Error = 40
+Epoch 2: Model predicts 95 pizzas, actual was 80 → Error = 15
+Epoch 3: Model predicts 82 pizzas, actual was 80 → Error = 2
+...training continues...
+Epoch 50: Model predicts 80.5 pizzas, actual was 80 → Error = 0.5 ✅
+```
+
+---
+
+## 8. Evaluation Metrics
+
+### What is it?
+
+After training, you need to measure **how good** your model actually is. Different problems use different measurements.
+
+### For Regression Problems (predicting numbers)
+
+#### Mean Absolute Error (MAE)
+
+> "On average, how far off is my prediction?"
+
+$$MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$$
+
+**Example:** Your pizza model predicted [80, 95, 60], actual was [82, 90, 65]
+
+```
+Errors: |80-82| + |95-90| + |60-65| = 2 + 5 + 5 = 12
+MAE = 12 / 3 = 4 pizzas off on average
+```
+
+#### Mean Squared Error (MSE)
+
+> "Same as MAE but big mistakes are punished much more."
+
+$$MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$
+
+Squaring means an error of 10 counts 100 times more than an error of 1. Use when large errors are especially bad.
+
+#### Root Mean Squared Error (RMSE)
+
+> "Same units as your original values — easier to understand."
+
+$$RMSE = \sqrt{MSE}$$
+
+If RMSE = 4.2 pizzas, your predictions are typically off by 4.2 pizzas.
+
+#### R² Score (R-Squared)
+
+> "What percentage of the variation in the data does my model explain?"
+
+$$R^2 = 1 - \frac{\sum(y_i - \hat{y}_i)^2}{\sum(y_i - \bar{y})^2}$$
+
+| R² Value | Meaning |
+|----------|---------|
+| 1.0 | Perfect predictions |
+| 0.9 | Explains 90% of variation — very good |
+| 0.5 | Explains 50% — average |
+| 0.0 | No better than always guessing the mean |
+| < 0 | Worse than a dumb average — something is wrong |
+
+---
+
+### For Classification Problems (predicting categories)
+
+#### Confusion Matrix
+
+The foundation of all classification metrics. For a spam/not-spam classifier:
+
+```
+                  Predicted: Spam    Predicted: Not Spam
+Actual: Spam         TP = 90              FN = 10
+Actual: Not Spam     FP = 5               TN = 895
+```
+
+| Term | Meaning | Example |
+|------|---------|---------|
+| **TP** (True Positive) | Correctly said YES | Correctly flagged spam |
+| **TN** (True Negative) | Correctly said NO | Correctly passed real email |
+| **FP** (False Positive) | Said YES, was actually NO | Called real email spam (bad!) |
+| **FN** (False Negative) | Said NO, was actually YES | Let spam through |
+
+#### Accuracy
+
+> "What % of all predictions were correct?"
+
+$$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$$
+
+```
+Accuracy = (90 + 895) / (90 + 895 + 5 + 10) = 985 / 1000 = 98.5%
+```
+
+> ⚠️ **Warning:** Accuracy is misleading on imbalanced datasets!
+> If 99% of emails are not spam, a model that always says "not spam" gets 99% accuracy — but is completely useless.
+
+#### Precision
+
+> "Of all the things I said were positive — how many actually were?"
+
+$$Precision = \frac{TP}{TP + FP}$$
+
+High precision = you rarely cry wolf.
+
+#### Recall (Sensitivity)
+
+> "Of all the real positives out there — how many did I catch?"
+
+$$Recall = \frac{TP}{TP + FN}$$
+
+High recall = you catch most of the real cases.
+
+#### Precision vs Recall Tradeoff
+
+```mermaid
+flowchart LR
+    A[Catch more positives] --> B[Recall goes UP ↑]
+    B --> C[But more false alarms]
+    C --> D[Precision goes DOWN ↓]
+    
+    E[Be more strict] --> F[Precision goes UP ↑]
+    F --> G[But miss some real ones]
+    G --> H[Recall goes DOWN ↓]
+```
+
+> **When to prioritize what:**
+> - **Medical diagnosis** → Prioritize Recall (don't miss sick patients)
+> - **Spam filter** → Prioritize Precision (don't block important emails)
+
+#### F1 Score
+
+> "The balanced average of Precision and Recall."
+
+$$F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}$$
+
+Use F1 when you need a single metric that balances both.
+
+### Summary: Which Metric to Use?
+
+```mermaid
+flowchart TD
+    A[Evaluation Metric Needed?] --> B{Type of Problem}
+    B -- Regression --> C[MAE: easy to interpret\nRMSE: penalizes big errors\nR²: overall model quality]
+    B -- Classification --> D{Classes balanced?}
+    D -- Yes --> E[Accuracy is fine]
+    D -- No --> F{What's more important?}
+    F -- Catch all positives --> G[Use Recall]
+    F -- Avoid false alarms --> H[Use Precision]
+    F -- Balance both --> I[Use F1 Score]
+```
+
+---
+
+## 9. Hyperparameter Tuning
+
+### What is it?
+
+Parameters are the model's internal values it learns from data (like the slope in linear regression).
+
+**Hyperparameters** are the settings **you** choose before training that control how learning happens. The model cannot learn these — you have to set them.
+
+Think of them like cooking settings:
+- Oven temperature = learning rate
+- Baking time = number of epochs
+- Ingredient amounts = tree depth, number of estimators
+
+### Common Hyperparameters by Model
+
+| Model | Key Hyperparameters |
+|-------|---------------------|
+| **Random Forest** | `n_estimators` (number of trees), `max_depth`, `min_samples_split` |
+| **XGBoost** | `learning_rate`, `n_estimators`, `max_depth`, `subsample` |
+| **Neural Network** | `learning_rate`, `batch_size`, `epochs`, `layers`, `neurons` |
+| **SVM** | `C` (margin tightness), `kernel`, `gamma` |
+| **K-Means** | `K` (number of clusters) |
+
+### Tuning Methods
+
+```mermaid
+flowchart TD
+    A[Hyperparameter Tuning Methods] --> B[Manual Tuning\nChange one value at a time\nSlow, requires experience]
+    A --> C[Grid Search\nTry every combination\nThorough but very slow]
+    A --> D[Random Search\nTry random combinations\nFaster, often just as good]
+    A --> E[Bayesian Optimization\nLearns which direction to search\nSmartest & most efficient]
+    A --> F[Automated AutoML\nTools like Optuna, H2O, AutoSklearn\nDoes it all for you]
+```
+
+### Grid Search Example
+
+You want to tune `max_depth` and `n_estimators` for a Random Forest.
+
+Grid Search tries every combination:
+
+```
+max_depth:      [3, 5, 10]
+n_estimators:   [50, 100, 200]
+
+Combinations tested:
+(3,  50)  → Score: 0.82
+(3,  100) → Score: 0.84
+(3,  200) → Score: 0.85
+(5,  50)  → Score: 0.86
+(5,  100) → Score: 0.89  ← BEST ✅
+(5,  200) → Score: 0.88
+(10, 50)  → Score: 0.85
+(10, 100) → Score: 0.84
+(10, 200) → Score: 0.83
+```
+
+Best settings: `max_depth=5`, `n_estimators=100`
+
+### Random Search Example
+
+Instead of all 9 combinations above, Random Search picks 4 random ones. Often lands close to the best with less computation.
+
+### Learning Curves — Did Tuning Help?
+
+```mermaid
+flowchart TD
+    A[Train model with tuned hyperparameters] --> B[Plot learning curve]
+    B --> C{What does it show?}
+    C -- Both scores plateau high --> D[Great! Model is well-tuned ✅]
+    C -- Gap between train and test --> E[Still overfitting\nTry: increase regularization\nreduce model complexity]
+    C -- Both scores plateau low --> F[Underfitting\nTry: more complex model\nmore features\nlower regularization]
+```
+
+### Tips for Hyperparameter Tuning
+
+| Tip | Why |
+|-----|-----|
+| Always use cross-validation when tuning | Avoids overfitting to the test set |
+| Tune one thing at a time at first | Easier to understand what's helping |
+| `learning_rate` is the most impactful in neural nets | Start here |
+| More trees in Random Forest rarely hurts | Diminishing returns above ~200 |
+| Deep trees overfit; shallow trees underfit | `max_depth` of 5–10 is usually safe |
+| Random Search with 50 trials often beats Grid Search | Much faster with similar results |
+
+---
+
+## Full End-to-End Flow
+
+```mermaid
+flowchart TD
+    PD([1. Problem Definition\nWhat am I predicting?]) --> DC
+    DC([2. Data Collection\nGather relevant, enough data]) --> EDA
+    EDA([3. EDA\nExplore, visualize, understand]) --> DCP
+    DCP([4. Data Cleaning\nFix missing, encode, scale]) --> TTS
+    TTS([5. Train-Test Split\n80% train / 20% test]) --> CM
+    CM([6. Choose a Model\nStart simple, upgrade if needed]) --> MT
+    MT([7. Model Training\nFit model on training data]) --> EM
+    EM([8. Evaluate\nMSE / R² / Accuracy / F1]) --> HT
+    HT([9. Hyperparameter Tuning\nGrid search / Random search]) --> RE{Score good?}
+    RE -- Yes --> DEPLOY([🚀 Deploy the Model])
+    RE -- No --> MT
+```
+
+---
+
+## Quick Reference Card
+
+| Step | What You Do | Key Output |
+|------|-------------|-----------|
+| Problem Definition | Define what to predict & success criteria | Problem type (regression/classification) |
+| Data Collection | Gather relevant data from all sources | Raw dataset |
+| EDA | Visualize, summarize, find patterns | Insights & problem list |
+| Data Cleaning | Fix missing values, outliers, encode categories | Clean dataset |
+| Train-Test Split | Divide data so model can be tested fairly | Train + Test sets |
+| Choose Model | Pick algorithm matching problem & data size | Chosen algorithm(s) |
+| Model Training | Fit model to training data | Trained model |
+| Evaluation | Measure performance with right metrics | Score (R², RMSE, F1, etc.) |
+| Hyperparameter Tuning | Optimize model settings | Better score |
+
+---
+
+*This guide covers the core ML workflow. Real projects are iterative — you will loop back through these steps many times before being satisfied with the result.*
